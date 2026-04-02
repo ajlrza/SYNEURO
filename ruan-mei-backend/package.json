@@ -1,0 +1,19 @@
+{
+  "name": "ruan-mei-backend",
+  "version": "0.0.0",
+  "description": "The brains of my Ruan Mei",
+  "type": "module",
+  "scripts": {
+    "start": "./app.exe",
+    "dev": "go run app.go",
+    "build": "go build -o ruan-mei-backend .",
+    "serve": "go run main.go"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "gofiber/fiber/v3": "^",
+    "tursodatabase/go-libsql": "^",
+    "segmentio/kafka-go": "^",
+    "joho/godotenv": "^"
+  }
+}
