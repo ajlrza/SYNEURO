@@ -30,7 +30,8 @@ while (app_session.monitorApp("User") == user and app_session.monitorApp("State"
     if (user_input == "Quit"):
         app_session.stopApp()
 
-    chat_completion = client.chat.completions.create(
+    if (user_input != "Quit"):
+        chat_completion = client.chat.completions.create(
         messages=[
             {
                 "role": "user",
@@ -44,13 +45,14 @@ while (app_session.monitorApp("User") == user and app_session.monitorApp("State"
         model="llama-3.3-70b-versatile",
     )
 
-    client_usage_monitor = {
-        "Completion Time": chat_completion.usage.completion_time,
-        "Tokens Used": chat_completion.usage.completion_tokens,
-        "Completion Details": chat_completion.usage.completion_tokens_details
-    }
+        client_usage_monitor = {
+            "Completion Time": chat_completion.usage.completion_time,
+            "Tokens Used": chat_completion.usage.completion_tokens,
+            "Completion Details": chat_completion.usage.completion_tokens_details
+        }
 
-    if (client_usage_monitor["Tokens Used"] <= 12000):
-        print(f"Your tokens is about to exceed: {client_limits["TPM"]} tokens per minute")
+        if (client_usage_monitor["Tokens Used"] <= 12000):
+            print(f"Your tokens is about to exceed: {client_limits["TPM"]} tokens per minute")
 
-    print(chat_completion.choices[0].message.content)
+        print(chat_completion.choices[0].message.content)
+        
