@@ -19,11 +19,13 @@ client_limits = {
     "TPM": 6000
 }
 
-user = input("Enter your username")
+def app_function():
+    user = input("Enter your username")
 
-app_session = classes.appManager(user, True)
+    app_session = classes.appManager(user, True)
 
-while (app_session.monitorApp("User") == user and app_session.monitorApp("State") == True):
+    while (app_session.monitorApp("User") == user and app_session.monitorApp("State") == True):
+        tokens_used = 0
 
     user_input = input("Enter your message...\n")
 
@@ -51,8 +53,11 @@ while (app_session.monitorApp("User") == user and app_session.monitorApp("State"
             "Completion Details": chat_completion.usage.completion_tokens_details
         }
 
-        if (client_usage_monitor["Tokens Used"] <= 12000):
+        tokens_used += client_usage_monitor["Tokens Used"]
+
+        if (tokens_used > 3000 and tokens_used < 6000 ):
             print(f"Your tokens is about to exceed: {client_limits["TPM"]} tokens per minute")
+            print(tokens_used)
 
         print(chat_completion.choices[0].message.content)
         
