@@ -4,7 +4,7 @@ export async function postMessage(message: String, user: String) {
         "Message": message,
     }
 
-    const fastAPIServer: string = "https://link.com/talk"
+    const fastAPIServer: string = "https://digital-sanctuary-ks6k.onrender.com/"
 
     try {
         const postMessage = await fetch(fastAPIServer, {
