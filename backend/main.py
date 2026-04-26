@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 origins = [
-    "https://digital-sanctuary-kappa.vercel.app/",  # Common for React/Vue
+    "https://digital-sanctuary-kappa.vercel.app",  # Common for React/Vue
 ]
 
 app = FastAPI()
@@ -15,7 +15,6 @@ app.add_middleware(
     allow_methods=["*"],              # Allow all HTTP methods (GET, POST, etc.)
     allow_headers=["*"],              # Allow all headers
 )
-
 
 @app.get("/")
 def read_root():
