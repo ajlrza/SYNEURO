@@ -23,4 +23,7 @@ RUN pip3 install --no-cache-dir \
     uvicorn
 
 # Copy backend code into the container
-COPY ./ /app/src
+COPY . /app/src
+
+# Initialize the web server
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "80"]
