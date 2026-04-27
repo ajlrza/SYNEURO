@@ -17,23 +17,10 @@ const App: Component = () => {
     form.reset();
     
     const chat_kurisu = await postMessage(user, message);
-
-    if (chat_kurisu != undefined) {
-       setKurisuResponse(chat_kurisu)
-    }
+    setKurisuResponse(chat_kurisu)
     
   }
 
-  function displayKurisuMessage(): string {
-    if (kurisuResponse != undefined || kurisuResponse != null) {
-        return kurisuResponse;
-    }
-    else {
-      return "Kurisu is sleeping.";
-    }
-  }
-  
-  console.log(displayKurisuMessage())
 
 
   return (
@@ -88,7 +75,7 @@ const App: Component = () => {
           </h3>
           
           <p class="text-[17px] sm:text-xl md:text-2xl lg:text-[28px] text-white font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,1)] leading-snug sm:leading-relaxed">
-            {displayKurisuMessage()}
+            {kurisuResponse}
           </p>
 
           <form
