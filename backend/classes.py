@@ -1,10 +1,13 @@
 class appManager:
       user = ""
+      message = ""
       state = False
+      tokens_used = 0
 
-      def __init__(self, user, state):
+      def __init__(self, user):
           self.user = user
           self.state = True
+          self.tokens_used = 0
 
       def startApp(self):
            if (self.state != True):
@@ -28,5 +31,34 @@ class appManager:
                 return self.user
            elif (choice == "State"):
                 return self.state
-
+           
+      def chatGroq(self, client, sys_prompt, message: str):
+          message_response = {}
+          if (message != None):
+               chat_groq = client.chat.completions.create(
+                    messages=[
+                         {
+                              "role": "user",
+                              "content": message,
+                              "role": "system",
+                              "content": sys_prompt.kurisu_personality_prompt("Lore"),
+                              "role": "system",
+                              "content": sys_prompt.kurisu_personality_prompt("Personality")
+                         }
+                    ],
+                    model="llma-3.3-70b-versatile"
+               )
+               client_usage_monitor = {
+                    "Completion Time": chat_groq.usage.completion_time,
+                    "Tokens Used": chat_groq.usage.completion_tokens,
+                    "Completion Details": chat_groq.usage.completion_tokens_details
+               }
+               message_response("Response") = chat_groq.choices[0].message.content
+               tokens_used += client_usage_monitor["Tokens Used"]
+               if (tokens_used > 3000 and tokens_used < 6000):
+                    message_response("Tokens Used") = tokens_used
+               return message_response
+          else:
+               return "Message cannot be empty."
+           
            

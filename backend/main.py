@@ -16,7 +16,7 @@ app.add_middleware(
     allow_headers=["*"],              # Allow all headers
 )
 
-@app.post("/")
+@app.post("/chatKurisu")
 def read_root():
     test = app_main.chat_completion
     return {"Response": test.choices[0].message.content}
