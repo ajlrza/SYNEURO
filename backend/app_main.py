@@ -18,6 +18,20 @@ client_limits = {
     "TPM": 6000
 }
 
+chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": "HI",
+                "role": "system",
+                "content": sys_prompt.kurisu_personality_prompt("Lore"),
+                "role": "system",
+                "content": sys_prompt.kurisu_personality_prompt("Personality")
+            }
+        ],
+        model="llama-3.3-70b-versatile",
+    )
+
 def app_function(user):
 
     app_session = classes.appManager(user, True)

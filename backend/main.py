@@ -18,8 +18,8 @@ app.add_middleware(
 
 @app.post("/")
 def read_root():
-    test = app_main.app_function("test")
-    return {"Response": test}
+    test = app_main.chat_completion
+    return {"Response": test.choices[0].message.content}
 
 @app.post("/talk")
 async def read_message(request: Request, message: str):
