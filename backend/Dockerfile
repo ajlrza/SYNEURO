@@ -20,7 +20,8 @@ RUN pip3 install --no-cache-dir \
     groq \
     pydantic \
     fastapi \
-    uvicorn
+    uvicorn \
+    python-dotenv
 
 # Copy backend code into the container
 COPY . /app/src

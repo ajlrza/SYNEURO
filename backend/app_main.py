@@ -6,7 +6,6 @@ from . import sys_prompt
 from . import classes
 from dotenv import load_dotenv
 
-
 load_dotenv() 
 
 client = Groq(
