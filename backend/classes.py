@@ -46,7 +46,7 @@ class appManager:
                               "content": sys_prompt_background
                          }
                     ],
-                    model="llma-3.3-70b-versatile"
+                    model="llama-3.3-70b-versatile"
                )
                client_usage_monitor = {
                     "Completion Time": chat_groq.usage.completion_time,
