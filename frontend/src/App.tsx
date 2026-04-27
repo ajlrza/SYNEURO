@@ -3,11 +3,34 @@ import { createEffect, createSignal } from 'solid-js';
 import { postMessage } from './Services/postMessage';
 
 const App: Component = () => {
-  const [inputValue, setInputValue] = createSignal('');
+  const [kurisuResponse, setKurisuResponse]: any = createSignal("");
 
-  async function sendMessage(user: string, message: string): Promise<Response | undefined> {
-    const post_it = await postMessage("test", message);
-    return post_it;
+  async function sendMessage(e: SubmitEvent): Promise<void> {
+    e.preventDefault();
+
+    const form = e.currentTarget as HTMLFormElement;
+
+    const formData = new FormData(form);
+    const user_message = formData.get("response_chat") as string;
+
+    if (!user_message) return;
+    
+    const chat_kurisu = await postMessage(user_message, "test");
+
+    if (chat_kurisu != undefined) {
+       setKurisuResponse(chat_kurisu.text)
+    }
+    
+    form.reset();
+  }
+
+  function displayKurisuMessage(): string {
+    if (kurisuResponse != undefined || kurisuResponse != null) {
+        return kurisuResponse;
+    }
+    else {
+      return "Kurisu is sleeping.";
+    }
   }
 
 
@@ -63,23 +86,24 @@ const App: Component = () => {
           </h3>
           
           <p class="text-[17px] sm:text-xl md:text-2xl lg:text-[28px] text-white font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,1)] leading-snug sm:leading-relaxed">
-            I told you, I'm not your assistant! But... I suppose this responsive interface is acceptable. Are we ready to begin the experiment?
+            {kurisuResponse}
           </p>
 
-          <div class="mt-4 sm:mt-8 flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-4 border-b border-white/20 pb-2 focus-within:border-cyan-400 transition-colors">
+          <form
+           onSubmit={(e) => sendMessage(e)}
+           class="mt-4 sm:mt-8 flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-4 border-b border-white/20 pb-2 focus-within:border-cyan-400 transition-colors">
             <span class="hidden sm:inline text-gray-500 font-bold text-[10px] sm:text-xs tracking-[0.2em] uppercase shrink-0">You</span>
             <input 
               type="text" 
+              name="response_chat"
               placeholder="Type your response..." 
-              value={inputValue()}
-              onInput={(e) => setInputValue(e.currentTarget.value)}
               class="flex-1 w-full sm:w-auto bg-transparent text-gray-200 outline-none placeholder-gray-600 text-base sm:text-lg drop-shadow-md min-w-[150px]"
             />
-            <button onClick={() => sendMessage(inputValue())} class="text-gray-400 hover:text-cyan-400 transition-colors uppercase text-xs sm:text-sm font-bold tracking-widest flex items-center gap-1 sm:gap-2 p-2 sm:p-0 ml-auto shrink-0">
+            <button class="text-gray-400 hover:text-cyan-400 transition-colors uppercase text-xs sm:text-sm font-bold tracking-widest flex items-center gap-1 sm:gap-2 p-2 sm:p-0 ml-auto shrink-0">
               <span class="hidden sm:inline">Send</span> 
               <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </button>
-          </div>
+          </form>
         </div>
 
         {/* Bottom Menu Bar */}
