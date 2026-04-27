@@ -54,9 +54,9 @@ class appManager:
                     "Completion Details": chat_groq.usage.completion_tokens_details
                }
                message_response["Response"] = chat_groq.choices[0].message.content
-               tokens_used += client_usage_monitor["Tokens Used"]
-               if (tokens_used > 3000 and tokens_used < 6000):
-                    message_response["Tokens Used"] = tokens_used
+               self.tokens_used += client_usage_monitor["Tokens Used"]
+               if (self.tokens_used > 3000 and self.tokens_used < 6000):
+                    message_response["Tokens Used"] = self.tokens_used
                return message_response
           else:
                return "Message cannot be empty."
