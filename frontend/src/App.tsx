@@ -18,7 +18,7 @@ const App: Component = () => {
     const chat_kurisu = await postMessage(user_message, "test");
 
     if (chat_kurisu != undefined) {
-       setKurisuResponse(chat_kurisu.text)
+       setKurisuResponse(chat_kurisu)
     }
     
     form.reset();
