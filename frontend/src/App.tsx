@@ -1,9 +1,10 @@
 import type { Component } from 'solid-js';
 import { createEffect, createSignal } from 'solid-js';
 import { postMessage } from './Services/postMessage';
+import { readMessage } from './Services/readMessage';
 
 const App: Component = () => {
-  const [kurisuResponse, setKurisuResponse]: any = createSignal("");
+  let responseChunk;
 
   async function sendMessage(e: SubmitEvent): Promise<void> {
     e.preventDefault();
@@ -16,11 +17,26 @@ const App: Component = () => {
 
     form.reset();
     
-    const chat_kurisu = await postMessage(user, message);
-    console.log(chat_kurisu)
-    setKurisuResponse(chat_kurisu)
-    
+    const kurisuMessage: Response | undefined = await postMessage(user, message);
+    if (kurisuMessage == undefined) {
+       const messageRetry: Response | undefined = await postMessage(user, message);
+    }
+    if (kurisuMessage != undefined) {
+        console.log(kurisuMessage)
+    }
   }
+
+  function readMessage(kurisuMessage: String): void {
+    let kurisuMessageChunk: String;
+    if (kurisuMessage != undefined) {
+        for (let wordIter = 0; wordIter <  kurisuMessage.split(" ").length; wordIter++){
+            kurisuMessageChunk = kurisuMessage.split(" ")[wordIter];
+        } 
+    }
+    if (kurisuMessage == undefined) {
+        console.log("Kurisu's message is undefined.");
+    }
+}
 
 
   return (
@@ -74,9 +90,9 @@ const App: Component = () => {
             Makise Kurisu
           </h3>
           
-          <p class="text-[17px] sm:text-xl md:text-2xl lg:text-[28px] text-white font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,1)] leading-snug sm:leading-relaxed">
-            {kurisuResponse}
-          </p>
+          <div class="text-[17px] sm:text-xl md:text-2xl lg:text-[28px] text-white font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,1)] leading-snug sm:leading-relaxed">
+            <p ref={responseChunk}></p>
+          </div>
 
           <form
            onSubmit={(e) => sendMessage(e)}
