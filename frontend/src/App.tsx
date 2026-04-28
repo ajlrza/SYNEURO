@@ -1,10 +1,9 @@
 import type { Component } from 'solid-js';
 import { createEffect, createSignal } from 'solid-js';
 import { postMessage } from './Services/postMessage';
-import { readMessage } from './Services/readMessage';
 
 const App: Component = () => {
-  let responseChunk;
+  let [responseChunk, setResponseChunk] = createSignal("");
 
   async function sendMessage(e: SubmitEvent): Promise<void> {
     e.preventDefault();
@@ -22,21 +21,32 @@ const App: Component = () => {
        const messageRetry: Response | undefined = await postMessage(user, message);
     }
     if (kurisuMessage != undefined) {
-        console.log(kurisuMessage)
+        readMessage(kurisuMessage);
     }
   }
 
-  function readMessage(kurisuMessage: String): void {
-    let kurisuMessageChunk: String;
+  async function readMessage(kurisuMessage: Response | undefined): Promise<void> {
+
+    if (!kurisuMessage || !kurisuMessage.body) {
+        return undefined; 
+      }
+
     if (kurisuMessage != undefined) {
-        for (let wordIter = 0; wordIter <  kurisuMessage.split(" ").length; wordIter++){
-            kurisuMessageChunk = kurisuMessage.split(" ")[wordIter];
-        } 
-    }
-    if (kurisuMessage == undefined) {
-        console.log("Kurisu's message is undefined.");
-    }
-}
+        const kurisuReadMessageStream = kurisuMessage.body?.getReader();
+        const streamDecoder = new TextDecoder();
+
+        while (true) {
+            let {done, value}: any = await kurisuReadMessageStream?.read()
+            if (done == false) {
+              let text = streamDecoder.decode(value)
+              setResponseChunk((prev) => prev + text);
+            }
+            if (done == true) {
+              break;
+            }
+        }
+      }
+  }
 
 
   return (
@@ -91,7 +101,7 @@ const App: Component = () => {
           </h3>
           
           <div class="text-[17px] sm:text-xl md:text-2xl lg:text-[28px] text-white font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,1)] leading-snug sm:leading-relaxed">
-            <p ref={responseChunk}></p>
+            {responseChunk()}
           </div>
 
           <form
