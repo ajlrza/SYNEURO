@@ -19,7 +19,7 @@ export async function postMessage(user: String, message: String): Promise<Respon
         if (!postMessage.ok) {
             throw new Error("Cannot message Kurisu at the moment");
         }
-        else if (postMessage.ok) {
+        if (postMessage.ok) {
             return postMessage;
         }
 

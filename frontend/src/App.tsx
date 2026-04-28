@@ -17,10 +17,10 @@ const App: Component = () => {
     form.reset();
     
     const chat_kurisu = await postMessage(user, message);
+    console.log(chat_kurisu)
     setKurisuResponse(chat_kurisu)
     
   }
-
 
 
   return (
