@@ -100,7 +100,7 @@ const App: Component = () => {
             Makise Kurisu
           </h3>
           
-          <div class="text-[17px] sm:text-xl md:text-2xl lg:text-[28px] text-white font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,1)] leading-snug sm:leading-relaxed">
+          <div class="text-[8px] sm:text-xl md:text-2xl lg:text-[28px] text-white font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,1)] leading-snug sm:leading-relaxed">
             {responseChunk()}
           </div>
 
