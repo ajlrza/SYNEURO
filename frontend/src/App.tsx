@@ -44,9 +44,9 @@ const App: Component = () => {
             const cleanedText = text.replace(/\n/g, "")
             setResponseChunk((prev) => prev.replace(/\n/g, "") + cleanedText)
             console.log(responseChunk())
-          }
-          if (done == true) {
-            break;
+            if (done == true) {
+              break;
+            }
           }
         }
     }
