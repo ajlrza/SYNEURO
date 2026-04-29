@@ -43,21 +43,12 @@ const App: Component = () => {
             let text = streamDecoder.decode(value)
             const cleanedText = text.replace(/\n/g, "")
             setResponseChunk((prev) => prev.replace(/\n/g, "") + cleanedText)
+            console.log(responseChunk())
           }
           if (done == true) {
             break;
           }
         }
-
-        const timerNow = setInterval(() => {
-          for (const word of responseChunk().split(" ")) {
-            setDisplayChunk((prev) => prev + " " + word)
-            console.log(displayChunk())
-          }
-          if (displayChunk().length == responseChunk().length) {
-          clearInterval(timerNow)
-          }
-        }, 1000)
     }
   }
 
