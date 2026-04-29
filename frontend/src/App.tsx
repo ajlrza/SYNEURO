@@ -55,6 +55,7 @@ const App: Component = () => {
       
       const delayMessage = setInterval(() => {
         setResponseChunk((prev) => prev + kurisuMessage)
+        console.log(responseChunk())
         if (responseChunk().length > prevResponseChunk.length) {
           clearInterval(delayMessage)
         }
