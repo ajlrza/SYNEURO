@@ -10,5 +10,8 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
+    rollupOptions: {
+      external: ['solid-js']
+    }
   },
 });
