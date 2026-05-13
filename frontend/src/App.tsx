@@ -2,11 +2,11 @@ import type { Component } from 'solid-js';
 import { createEffect, createSignal, on } from 'solid-js';
 import { postMessage, testMessage } from './Services/postMessage';
 
+
 const App: Component = () => {
   let [responseChunk, setResponseChunk] = createSignal("");
   let [displayChunk, setDisplayChunk] = createSignal("");
   let [userMessageDisplay, setUserMessageDisplay] = createSignal("");
-  let [kurisuChunkResize, setKurisuChunkResize] = createSignal<HTMLDivElement>();
 
 
   async function sendMessage(e: SubmitEvent): Promise<void> {

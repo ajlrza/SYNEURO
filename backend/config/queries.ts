@@ -1,15 +1,17 @@
-import { sql } from './db.js'
-
 // AI Gf Sprite Load
 
-export async function sprite(userid: number, gfid: number) {
+export async function load_sprite(userid: number, Drizzle: any) {
+    const get_gf_id = await Drizzle.execute('select 1');
+    
     const load = await sql`
     select gf from AI_girlfriends
     where gfID = ${gfid}
     `
 }
 
-export async function load_messages(usermessage: object) {
+// Load messages on user side if conversation is opened
+
+export async function load_message(usermessage: object, Drizzle: any) {
     const message_object: object = usermessage;
     const message: string = message_object.message;
     const userid: number = message_object.userid;
@@ -24,7 +26,9 @@ export async function load_messages(usermessage: object) {
     }
 }
 
-export async function save_message(usermessage: object) {
+// Save messages each time a message is sent
+
+export async function save_message(usermessage: object, Drizzle: any) {
     const message_object = usermessage;
     const message: string = message_object.message;
     const userid: number = message_object.userid;
@@ -39,7 +43,9 @@ export async function save_message(usermessage: object) {
     }
 }
 
-export async function save_conversation(messageschunk: object) {
+// Save conversations history for redundancy and data load
+
+export async function save_conversation(messageschunk: object, Drizzle: any) {
     const messageschunk_object = messageschunk;
     const messages: string = messageschunk_object.messages;
     const userid: number = messageschunk_object.userid;
@@ -54,7 +60,9 @@ export async function save_conversation(messageschunk: object) {
     }
 }
 
-export async function load_conversation(userid: number) {
+// Load conversation in the conversation history section
+
+export async function load_conversation_history(userid: number, Drizzle: any) {
     const userid_number = userid;
     if (userid_number) {
         const load_conversation: Object = await sql`
@@ -64,7 +72,9 @@ export async function load_conversation(userid: number) {
     }
 }
 
-export async function display_conversation(userid: number) {
+// Display previous conversations in conversation history
+
+export async function display_conversation(userid: number, Drizzle: any) {
     const userid_number = userid;
     if (userid_number) {
         const display_conversation: Object = await sql`

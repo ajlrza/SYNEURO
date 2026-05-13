@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from . import app_main
+from "./db_server" import Query
 
 origins = [
     "https://digital-sanctuary-kappa.vercel.app",  # Common for React/Vue
@@ -26,6 +27,18 @@ async def read_request(request: Request):
 
     api_response = app_main.appProxy(User, Message)
     return api_response['Response']
+
+@app.post("/query")
+async def read_request(request: Request):
+    
+    body = await request.json()
+
+    UserID = body.get("userID")
+    Message = body.get("message")
+    Date = body.get("messageDate")
+
+    db = db_server.
+
 
 @app.post("/testChat")
 async def read_request(request: Request):

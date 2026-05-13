@@ -2,12 +2,12 @@
   "name": "dgs-db",
   "version": "1.0.0",
   "description": "DB",
-  "main": "index.js",
+  "main": "./db.js",
   "type": "module",
   "scripts": {
-    "dev": "node --loader tsx src/index.ts",
+    "dev": "node --import tsx ./queries.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node ./db.js"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.2",
