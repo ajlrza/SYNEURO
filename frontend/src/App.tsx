@@ -106,6 +106,7 @@ const App: Component = () => {
       <div class="flex-1 overflow-y-auto px-3 py-2 scrollbar scrollbar-thumb-gray-700 scrollbar-track-transparent">
         <h4 class="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-3 px-2">Memory Logs</h4>
         
+        {/*I need a logic to make them pop up only when user requests */}
         <ul class="flex flex-col gap-1 text-sm text-gray-300">
           <li class="px-3 py-2.5 rounded-md bg-gray-800/70 text-cyan-400 font-medium cursor-pointer truncate border-l-2 border-cyan-400 shadow-sm">
             Current Timeline: 1.048596

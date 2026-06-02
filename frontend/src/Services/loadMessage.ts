@@ -1,14 +1,10 @@
-export async function postMessage(user_id: String, message: String, date: Date, time: Number, conversation_id: Number): Promise<Response | undefined> {
+export async function loadMessage(user: String, message: String): Promise<Response | undefined> {
     const messageBody: Object | null | undefined = {
-        "UserID": user_id,
+        "User": user,
         "Message": message,
-        "Date": date,
-        "Time": time,
-        "ConversationID": conversation_id
     }
 
-    const WaifuID: Number = 123
-    const fastAPIServer: string = `https://digital-sanctuary-ks6k.onrender.com/chat`
+    const fastAPIServer: string = "https://digital-sanctuary-ks6k.onrender.com/chatKurisu"
 
     try {
         const postMessage = await fetch(fastAPIServer, {
@@ -16,12 +12,11 @@ export async function postMessage(user_id: String, message: String, date: Date, 
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                mainBody: messageBody,
-                waifuID: 123
-            }),
+            body: JSON.stringify(messageBody),
         })
-
+        if (!postMessage.ok) {
+            throw new Error("Cannot message Kurisu at the moment");
+        }
         if (postMessage.ok) {
             return postMessage;
         }

@@ -1,4 +1,4 @@
-class appManager:
+class agentManager:
       user = ""
       message = ""
       state = False
@@ -56,5 +56,41 @@ class appManager:
                return message_response
           else:
                return "Message cannot be empty."
-           
-           
+
+# Default mode network of the agent brain
+class DFMNetwork:
+     pass
+# Executive function
+class CENetwork:
+     pass
+# Manages DFM and CEN
+class SALNetwork:
+     pass
+# Sensorimotor function
+class SENNetwork:
+     # Responsible for communication processing
+     pass
+class VISNetwork:
+     # Responsible for seeing the user and reacting
+     pass
+class LIMNetwork:
+     # Responsible for  Deeply involved in the emotional center of the brain; it regulates mood, emotional responses, motivation, and memory formation.
+     pass
+class VENNetwork:
+     # Unexpected attention awareness, randomness
+     pass
+
+# Brain - orchestrates each class (brain parts)
+# Though I may change the architecture if it scales up
+class agentBrain:
+     # Configure the brain
+     DFM = DFMNetwork()
+     CEN = CENetwork()
+     SAL = SALNetwork()
+     SEN = SENNetwork()
+     VIS = VISNetwork()
+     LIM = LIMNetwork()
+     VEN = VENNetwork()
+
+
+     pass
