@@ -16,7 +16,7 @@
 
 ## Overview
 
-Kanojo2D is a cross-platform web application built to deliver a more natural, engaging digital companionship experience. It combines AI-powered conversation, stateful memory, and random events to create a believable and responsive digital girlfriend.
+Kanojo2D is a cross-platform web application built to deliver a more natural, engaging digital companionship experience. It combines AI-powered conversation, stateful memory, and random, real-time events to simulate companionship.
 
 ## Features
 
