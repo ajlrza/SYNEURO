@@ -1,19 +1,11 @@
 {
-  "name": "backend",
-  "version": "0.0.0",
-  "description": "The brains of the Digital Sanctuary",
+  "name": "backend-typescript",
+  "version": "1.0.0",
   "type": "module",
-  "scripts": {
-    "start": "./app.exe",
-    "dev": "go run .",
-    "build": "go build -o backend .",
-    "serve": "go run main.go"
-  },
-  "license": "MIT",
   "dependencies": {
-    "gofiber/fiber/v3": "^",
-    "tursodatabase/go-libsql": "^",
-    "segmentio/kafka-go": "^",
-    "joho/godotenv": "^"
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1"
   }
 }

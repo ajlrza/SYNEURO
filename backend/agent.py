@@ -1,10 +1,12 @@
+import os
+import json
+import subprocess
 from openai import OpenAI
 from groq import Groq
-import os
-import os
-from .agent_config import sys_prompt
-from . import agent_classes
+from .agent_communication import sys_prompt
+from .agent_communication import agent_classes
 from dotenv import load_dotenv
+
 
 load_dotenv() 
 
@@ -14,6 +16,7 @@ client = Groq(
 
 def appProxy(dataObject: object):
 
+    # Inside the object
     UserID = dataObject["UserID"]
     Message = dataObject["Message"]
     Date = dataObject["Date"]
@@ -21,7 +24,21 @@ def appProxy(dataObject: object):
     Waifu = dataObject["Waifu"]
     ConversationID = dataObject["ConversationID"]
 
-    # We need to talk to the database bruv
+    # Start db listener
+    dbListener = subprocess.run(["npx", "ts-node", "database_communication/db_server.ts"])
+
+    # Write to JSON
+    with open("bridge.json", "r") as file:
+        data = json.load(file)
+    data["Communication"]["Object"] = dataObject
+    data["Communication"]["Written"] = True
+    with open("bridge.json", "w") as file:
+        json.dump(data, file, indent=4)
+
+    # Check JSON
+    with open("bridge.json", "r") as file:
+        data = json.load(file)
+        #soon
 
     groq_app = agent_classes.agentManager(UserID)
     

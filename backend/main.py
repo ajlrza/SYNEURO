@@ -32,9 +32,11 @@ async def read_request(request: Request):
     }
 
     api_response = agent.appProxy(dataObject)
+
     if api_response is False:
         return f"Cannot message {dataObject["Waifu"]} at the moment."
     return api_response.get('Response')
+
 
 @app.post("/saveMessage")
 async def read_request(request: Request):

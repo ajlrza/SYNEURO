@@ -1,10 +1,24 @@
-import { db } from './config/db'
+import { db } from '../backend_config/db.js';
+import * as fs from 'node:fs';
 
 // what if since the frontend is in TSX too
 // User messages, query, and loading stuff will be sent to TS and Python at the same time
 // Since the frontend logic would dictate how the user is acting right?, so if it
 // wants to load the message (automatically), it sends both to TS and Python, vice versa
 // and through TS, the query stuff could be handed to TS as middleman, to JS, so no more python? nah stillthere is
+
+console.log("👀 TypeScript is watching config.json for changes...");
+
+fs.watchFile('bridge.json', (curr, prev) => {
+    console.log("🔄 bridge.json has received data!");
+    
+    // Read the fresh data immediately
+    const data = JSON.parse(fs.readFileSync('bridge.json', 'utf-8'));
+    const dataObject = data
+    if (dataObject) {
+        // Need to route them now to queries soon
+    }
+});
 
 export async function query(query: String | undefined, object: Object | undefined) {
     const Query = db.Query;
