@@ -59,8 +59,9 @@ async def read_request(request: Request):
     UserID = body.get("userID")
 
     # Return stored data for the given user if available
+    # THIS ONE SOON
     try:
-        with open("python_javascript_bridge.json", "r", encoding="utf-8") as File:
+        with open("bridge.json", "r", encoding="utf-8") as File:
             data = json.load(File)
     except FileNotFoundError:
         data = {}

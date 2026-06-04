@@ -1,9 +1,60 @@
 {
- "Communication":
+ "Slot Status": {
+    "1": "Inactive",
+    "2": "Inactive",
+    "3": "Inactive",
+    "4": "Inactive",
+    "5": "Inactive"
+ },
+ "Communication_One":
     {
         "Written": false,
-        "Object": {
-            
+        "Object_One": {
+            "userID": 0,
+            "userMessage": "",
+            "Date": "1995-10-25",
+            "Time": "14:30:00",
+            "dbQuery": ""
         }
-    }   
+    }, 
+  "Communication_Two": {
+        "Written": false,
+        "Object_One": {
+            "userID": 0,
+            "userMessage": "",
+            "Date": "1995-10-25",
+            "Time": "14:30:00",
+            "dbQuery": ""
+        }
+    }, 
+  "Communication_Three": {
+        "Written": false,
+        "Object_One": {
+            "userID": 0,
+            "userMessage": "",
+            "Date": "1995-10-25",
+            "Time": "14:30:00",
+            "dbQuery": ""
+        }
+    }, 
+  "Communication_Four": {
+        "Written": false,
+        "Object_One": {
+            "userID": 0,
+            "userMessage": "",
+            "Date": "1995-10-25",
+            "Time": "14:30:00",
+            "dbQuery": ""
+        }
+    }, 
+  "Communication_Five": {
+        "Written": false,
+        "Object_One": {
+            "userID": 0,
+            "userMessage": "",
+            "Date": "1995-10-25",
+            "Time": "14:30:00",
+            "dbQuery": ""
+        }
+    }    
 }
