@@ -4,7 +4,7 @@
 
 # Syneuro Engine
 
-> An event-driven, distributed HCI middleware featuring a biomimetic cognitive architecture for stateful, low-latency AI agents.
+> An event-driven, distributed AFC (Affective Computing) middleware featuring a biomimetic cognitive architecture for stateful, low-latency AI agents.
 
 <div align="center" style="display:inline-flex; gap:16px; align-items:center; background:#111; border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:16px 24px; box-shadow:0 12px 32px rgba(0,0,0,0.25);">
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/3840px-Typescript_logo_2020.svg.png" alt="TypeScript" width="50" />
@@ -16,7 +16,7 @@
 
 ## 📖 Overview
 
-Syneuro Engine is a high-performance Human-Computer Interaction (HCI) middleware designed to bridge stateless Large Language Models (LLMs) with dynamic, real-time environments. Rather than relying on static prompt chains, Animus orchestrates AI behavior using a **neuro-inspired cognitive architecture**, routing tasks through distinct "brain networks" (Executive, Salience, Limbic, etc.) based on real-time stimuli.
+Syneuro Engine is a high-performance distributed AFC (Affective Computing) middleware designed to bridge stateless Large Language Models (LLMs) with dynamic, real-time environments. Rather than relying on static prompt chains, Animus orchestrates AI behavior using a **neuro-inspired cognitive architecture**, routing tasks through distinct "brain networks" (Executive, Salience, Limbic, etc.) based on real-time stimuli.
 
 Purpose-built for virtual agents and embodied AI (robotics, edge devices), Animus handles temporal continuity, affective computing, and high-throughput sensory data ingestion with sub-millisecond coordination and deterministic state serialization.
 
