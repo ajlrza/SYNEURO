@@ -4,7 +4,7 @@
 
 # Animus Engine
 
-> An event-driven, distributed HCI middleware for stateful, low-latency, and embodied AI agents.
+> An event-driven, distributed HCI middleware featuring a biomimetic cognitive architecture for stateful, low-latency AI agents.
 
 <div align="center" style="display:inline-flex; gap:16px; align-items:center; background:#111; border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:16px 24px; box-shadow:0 12px 32px rgba(0,0,0,0.25);">
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/3840px-Typescript_logo_2020.svg.png" alt="TypeScript" width="50" />
@@ -16,33 +16,35 @@
 
 ## 📖 Overview
 
-Animus Engine is a high-performance Human-Computer Interaction (HCI) middleware designed to bridge stateless Large Language Models (LLMs) with dynamic, real-time environments. It operates as the cognitive orchestration layer—handling temporal continuity (long-term memory), affective computing (state machines), and high-throughput sensory data ingestion. 
+Animus Engine is a high-performance Human-Computer Interaction (HCI) middleware designed to bridge stateless Large Language Models (LLMs) with dynamic, real-time environments. Rather than relying on static prompt chains, Animus orchestrates AI behavior using a **neuro-inspired cognitive architecture**, routing tasks through distinct "brain networks" (Executive, Salience, Limbic, etc.) based on real-time stimuli.
 
-By decoupling core AI logic from the client interface, Animus provides an un-opinionated backend architecture. It is purpose-built for virtual agents and embodied AI (robotics, edge devices) where sub-millisecond coordination, deterministic state serialization, and minimal buffer bloat are structural requirements.
+Purpose-built for virtual agents and embodied AI (robotics, edge devices), Animus handles temporal continuity, affective computing, and high-throughput sensory data ingestion with sub-millisecond coordination and deterministic state serialization.
 
-## ✨ Core Architecture
+## 🧠 The Agent Brain (Cognitive Architecture)
 
-* **Custom IPC Bridge:** A slot-based Inter-Process Communication mechanism built to bypass HTTP/gRPC overhead. It routes strict-typed telemetry and database queries across Go, Python, and TypeScript runtimes with ultra-low latency.
-* **Event-Driven Messaging (Kafka):** Ingests concurrent sensor/input data and decouples text generation from state persistence. This ensures strict event sequencing and scalable asynchronous processing under heavy I/O loads.
-* **Low-Latency Streaming Pipeline:** Pipes chunked LLM tokens directly from upstream inference providers (e.g., Groq API) through the transport layer to the WebSocket client, enforcing tight conversational rhythm.
-* **Stateful Memory Management (Go):** A concurrent, race-free persistence layer that actively manages and injects context windows and conversational history into the agent's execution pipeline.
-* **Dynamic Affective State Machine:** Replaces static system prompting with a deterministic runtime engine. It calculates an agent’s internal variables (e.g., environmental uncertainty, fatigue, behavioral shifts) in real-time, enforcing situational awareness on every turn.
+At the core of the Python inference pipeline is the `agentBrain`, which orchestrates LLM calls and state updates across seven distinct sub-networks, mimicking human cognitive processing:
 
-## 🛠️ Tech Stack
+* **`SALNetwork` (Salience):** The core router. It actively monitors incoming telemetry and decides whether the agent should be in a resting state (`DFM`) or active processing state (`CEN`).
+* **`CENetwork` (Central Executive):** Handles high-level reasoning, complex problem solving, tool execution, and goal-directed behavior.
+* **`DFMNetwork` (Default Mode):** The agent's baseline state. Handles internal monologue, memory consolidation, and background context summarization when no immediate user input is detected.
+* **`LIMNetwork` (Limbic):** The affective state machine. Regulates the agent's internal mood, emotional responses, and assigns emotional weight to memory formation.
+* **`SENNetwork` (Sensorimotor):** Manages outbound communication processing, formatting text, speech syntax, and physical hardware commands.
+* **`VISNetwork` (Visual):** Dedicated to processing visual inputs, computer vision arrays, and spatial awareness feeds.
+* **`VENNetwork` (Ventral Attention):** The interrupt handler. Manages sudden environmental shifts, unexpected attention grabs, and introduces necessary behavioral randomness.
 
-* **Systems Infrastructure & Memory:** Go
-* **Inference Pipeline & Logic:** Python, FastAPI
-* **Gateway Layer & WebSockets:** TypeScript, Node.js
-* **Distributed Message Broker:** Apache Kafka
-* **Low-Latency Hardware Inference:** Groq API (Llama Architecture)
+## ✨ Systems Infrastructure
+
+* **Custom IPC Bridge:** A slot-based Inter-Process Communication mechanism bypassing HTTP/gRPC overhead, routing telemetry across Go, Python, and TypeScript with ultra-low latency.
+* **Event-Driven Messaging (Kafka):** Ingests concurrent sensor/input data and decouples text generation from state persistence, ensuring strict event sequencing.
+* **Stateful Memory Management (Go):** A concurrent, race-free persistence layer that actively manages and injects context windows into the cognitive networks.
+* **Low-Latency Streaming Pipeline:** Pipes chunked LLM tokens directly from upstream inference (e.g., Groq API) through the transport layer to the WebSocket client.
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-Ensure you have the following installed on your host machine:
-* [Docker](https://www.docker.com/) & Docker Compose (for Kafka/Zookeeper)
+* [Docker](https://www.docker.com/) & Docker Compose
 * [Go](https://go.dev/) (1.20+)
 * [Python](https://www.python.org/) (3.10+)
 * [Node.js](https://nodejs.org/) (18+)
@@ -56,62 +58,71 @@ git clone [https://github.com/your-org/animus-engine.git](https://github.com/you
 cd animus-engine
 ```
 
-**2. Start the Kafka Message Broker**
+**2. Start the Message Broker & Microservices**
 ```bash
 docker-compose up -d
-```
-
-**3. Set up environment variables**
-```bash
 cp .env.example .env
-# Edit .env to add your GROQ_API_KEY and custom port configurations
-```
-
-**4. Spin up the microservices**
-Run the core services concurrently using the provided Makefile:
-```bash
 make start-all
 ```
-*(This will initialize the Go Memory Manager, Python Inference Pipeline, and TS Gateway).*
 
 ---
 
-## 🔌 Usage Example: Connecting a Client
+## 🔌 Usage Examples
 
-Once the engine is running, your edge device or front-end client can connect to the TypeScript Gateway via WebSocket to stream sensor telemetry and receive LLM tokens in real-time.
+### 1. Backend: Initializing the Cognitive Architecture
+The core logic resides in the Python FastAPI layer, where the `agentBrain` is instantiated to process incoming Kafka events.
+
+```python
+# inference/brain.py
+from networks import DFMNetwork, CENetwork, SALNetwork, SENNetwork, VISNetwork, LIMNetwork, VENNetwork
+
+class AgentBrain:
+    def __init__(self):
+        # Configure the cognitive networks
+        self.DFM = DFMNetwork() # Default Mode (Idle/Memory)
+        self.CEN = CENetwork()  # Executive (Reasoning)
+        self.SAL = SALNetwork() # Salience (Manager/Router)
+        self.SEN = SENNetwork() # Sensorimotor (Communication)
+        self.VIS = VISNetwork() # Visual (Observation)
+        self.LIM = LIMNetwork() # Limbic (Affective/Mood)
+        self.VEN = VENNetwork() # Ventral (Interrupts/Randomness)
+
+    async def process_stimulus(self, event_payload):
+        # Salience network decides which system handles the input
+        active_network = self.SAL.evaluate(event_payload)
+        response = await active_network.execute(event_payload, mood_state=self.LIM.current_state)
+        return self.SEN.format_output(response)
+```
+
+### 2. Edge Device / Front-End: Streaming Telemetry
+Connect to the TypeScript Gateway via WebSocket to send sensory data and receive cognitive output.
 
 ```javascript
-// Example: Client-side connection to Animus Engine
+// client.js
 const socket = new WebSocket('ws://localhost:8080/v1/stream');
 
 socket.onopen = () => {
-  console.log('Connected to Animus Neural Gateway');
-  
-  // Send sensory/context data to the engine
+  // Trigger the VENNetwork (Unexpected stimulus) or VISNetwork
   const payload = {
-    event_type: "sensor_input",
+    event_type: "visual_interrupt",
     timestamp: Date.now(),
-    data: {
-      user_proximity: 1.2, // meters
-      ambient_noise_db: 45
-    }
+    data: { user_entered_frame: true }
   };
   socket.send(JSON.stringify(payload));
 };
 
-// Stream chunked LLM response and affective state updates
 socket.onmessage = (event) => {
   const response = JSON.parse(event.data);
   if (response.type === 'token') {
     process.stdout.write(response.content);
-  } else if (response.type === 'affective_state') {
-    console.log(`\n[State Shift] Agent Alertness: ${response.state.alertness}`);
+  } else if (response.type === 'limbic_update') {
+    console.log(`\n[Limbic Shift] Agent Mood: ${response.state.mood}`);
   }
 };
 ```
 
 ## 🤝 Contributing
-Contributions are welcome! Please review our [Contributing Guidelines](CONTRIBUTING.md) and ensure all PRs pass the strict-typing and latency benchmark tests.
+Contributions to network architectures (specifically expanding `CENetwork` tool-use or `LIMNetwork` emotional heuristics) are highly encouraged. Please review our [Contributing Guidelines](CONTRIBUTING.md).
 
 ## 📄 License
 This project is licensed under the [MIT License](LICENSE).
