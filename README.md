@@ -2,9 +2,9 @@
   <img src="./Kanojo2D_Logo.png" alt="Kanojo2D Logo" width="180" style="max-width:100%; height:auto;" />
 </p>
 
-# Kanojo2D
+# Animus Engine
 
-> Experience digital companionship in real-time.
+> An immersive, state-driven conversational AI interface.
 
 <div align="center" style="display:inline-flex; gap:16px; align-items:center; background:#111; border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:16px 24px; box-shadow:0 12px 32px rgba(0,0,0,0.25);">
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/3840px-Typescript_logo_2020.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail" alt="TypeScript" width="50" />
@@ -16,24 +16,22 @@
 
 ## Overview
 
-Kanojo2D is an interactive, cross-platform web application designed to redefine digital companionship. By seamlessly blending AI-driven dialogue, persistent stateful memory, and dynamic real-time events, it creates a highly interactive and lifelike virtual connection.
+Animus Engine is an interactive, cross-platform web application that leverages advanced LLMs and event-driven architecture to create highly responsive virtual agents. By blending low-latency dialogue generation, persistent stateful memory, and dynamic emotional modeling, it delivers a deeply interactive and lifelike user experience.
 
 ## Features
 
-- Chat with a digital companion that feels more alive and personality-rich
-- Enjoy a visual novel-style interface with animated text and atmospheric design
-- See replies appear gradually with a typewriter-style message reveal
-- Save and load past conversations so your chat history is available later
-- Supports different girlfriend profiles and story moods depending on the user
-- Mobile-friendly layout that works well on phones and desktop browsers
-- Includes quick access to history, profile changes, and settings from the chat screen
-- Comfort your digital companion when she feels sick, disgusted, angry, or during random times
+* **Persona-Driven AI:** Engage with dynamic virtual assistants engineered for nuanced, personality-rich interactions.
+* **Immersive User Interface:** Features a visual novel-inspired frontend with rich atmospheric design and dynamic real-time text streaming (typewriter-style rendering) for natural pacing.
+* **Persistent Stateful Memory:** Conversation history and contextual data are saved and loaded seamlessly, allowing long-term continuity across sessions.
+* **Customizable Behavioral Profiles:** Supports multiple distinct agent personas, enabling varied conversational styles, adaptive moods, and unique contextual scenarios.
+* **Dynamic Emotional Modeling:** The system simulates real-time emotional shifts and situational events (e.g., fatigue, frustration, or spontaneous mood changes), requiring the user to adapt their conversational approach.
+* **Responsive Design:** Fully optimized for fluid performance across both mobile and desktop environments.
+* **Intuitive Dashboard:** Streamlined UI with quick-access controls for session history, persona management, and application settings.
 
 ## Tech Stack
 
-- TypeScript
-- FastAPI
-- Kafka
-- Go
-- Groq
-
+* TypeScript
+* FastAPI
+* Kafka
+* Go
+* Groq
