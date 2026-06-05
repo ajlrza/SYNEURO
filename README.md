@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./Animus.png" alt="Animus Logo" width="180" style="max-width:100%; height:auto;" />
+  <img src="./animus.png" alt="Animus Logo" width="180" style="max-width:100%; height:auto;" />
 </p>
 
 # Animus Engine
