@@ -59,26 +59,41 @@ class agentManager:
 
 # Default mode network of the agent brain
 class DFMNetwork:
-     pass
+     def __init__(self, agentOutput):
+          pass
 # Executive function
 class CENetwork:
-     pass
+     def __init__(self, agentOutput):
+          pass
 # Manages DFM and CEN
 class SALNetwork:
-     pass
+     def __init__(self, DFMCENObject):
+          pass
 # Sensorimotor function
 class SENNetwork:
      # Responsible for communication processing
-     pass
+     def __init__(self, agentOutput, userOutput):
+          pass
 class VISNetwork:
-     # Responsible for seeing the user and reacting
-     pass
+     def __init__(self):
+          pass
 class LIMNetwork:
      # Responsible for  Deeply involved in the emotional center of the brain; it regulates mood, emotional responses, motivation, and memory formation.
-     pass
+     def __init__(self, agentOutput, userOutput):
+          self.Happy = 0
+          self.Sad = 0
+          self.Disgust = 0
+          self.Fear = 0
+          self.Anger = 0
+          self.Surprise = 0
+          pass
+     # The Thalamo-Amygdala Pathway
+
+     # Since there are 100feeelings, itsmost likely 
 class VENNetwork:
      # Unexpected attention awareness, randomness
-     pass
+     def __init__(self):
+          pass
 
 # Brain - orchestrates each class (brain parts)
 # Though I may change the architecture if it scales up
@@ -91,6 +106,4 @@ class agentBrain:
      VIS = VISNetwork()
      LIM = LIMNetwork()
      VEN = VENNetwork()
-
-
      pass

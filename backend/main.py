@@ -3,6 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from . import agent
 import json
 
+
+# Server 
+
 origins = [
     "https://digital-sanctuary-kappa.vercel.app",
 ]
