@@ -43,11 +43,10 @@ At the core of the Python inference pipeline is the `agentBrain`, which orchestr
   [LiveKit Server]    ---> Handles ultra-low latency A/V routing & VAD
        │
        ▼
-[Python Agent Worker] ---> Pipecat 
+[Python Agent Worker] ---> (Pipecat Orchestrator)
        │                   
-       │
-       ├─► [OpenCV] ---> Extracts facial points & visual context
-       ├─► [AI Model]  ---> Main AI model 
+       ├─► [OpenCV]        ---> Extracts facial points & visual context
+       ├─► [AI Model]      ---> Main Foundational Model (Reasoning Hub)
        │
        ▼
  [Kafka State Topic]  ---> (Decoupled stream buffer for memory & state)
