@@ -37,22 +37,27 @@ At the core of the Python inference pipeline is the `agentBrain`, which orchestr
 * **Stateful Memory Management (Go):** A concurrent, race-free persistence layer that actively manages and injects context windows into the cognitive networks.
 * **Low-Latency Streaming Pipeline:** Pipes chunked LLM tokens directly from upstream inference (e.g., Groq API) through the transport layer to the WebSocket client.
 
-[User App / Webcams]
-       │ (WebRTC connection: UDP, zero head-of-line blocking)
-       ▼
-  [LiveKit Server]    ---> Handles ultra-low latency A/V routing & VAD
-       │
-       ▼
-[Python Agent Worker] ---> (Pipecat Orchestrator)
-       │                   
-       ├─► [OpenCV]        ---> Extracts facial points & visual context
-       ├─► [AI Model]      ---> Main Foundational Model (Reasoning Hub)
-       │
-       ▼
- [Kafka State Topic]  ---> (Decoupled stream buffer for memory & state)
-       │
-       ▼
-   [Go Engine]        ---> Handles long-term memory, state serialization, and context injection
+flowchart TD
+    A["User App / Webcams"] -- "WebRTC UDP, zero head-of-line blocking" --> B["LiveKit Server"]
+    B -- "Ultra-low latency A/V routing & VAD" --> C["Python Agent Worker<br/>(Pipecat Orchestrator)"]
+    
+    C --> D["OpenCV<br/>(Extracts facial points & visual context)"]
+    C --> E["AI Model<br/>(Main Foundational Model)"]
+    
+    D --> F["Kafka State Topic<br/>(Decoupled stream buffer)"]
+    E --> F
+    
+    F -- "State serialization & context injection" --> G["Go Engine<br/>(Handles long-term memory)"]
+
+    classDef default fill:#1e1e1e,stroke:#888,stroke-width:2px,color:#fff;
+    classDef cloud fill:#0d47a1,stroke:#64b5f6,stroke-width:2px,color:#fff;
+    classDef edge fill:#004d40,stroke:#4db6ac,stroke-width:2px,color:#fff;
+    classDef broker fill:#e65100,stroke:#ffb74d,stroke-width:2px,color:#fff;
+
+    class A,B edge;
+    class C,D,E cloud;
+    class F broker;
+    class G default;
 
 
 ### Prerequisites
