@@ -11,8 +11,6 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
-    golang-go \
-    --save-dev @types/node \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python libraries using pip3

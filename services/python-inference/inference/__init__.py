@@ -3,7 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from . import agent
 import json
 
-
 # Server 
 
 origins = [
@@ -19,47 +18,44 @@ app.add_middleware(
     allow_headers=["*"],             
 )
 
-@app.post("/chat")
+@app.post("/live_talk")
 async def read_request(request: Request):
 
     body = await request.json()
     body = body or {}
 
-    dataObject = {
-        "UserID": body.get("UserID"),
-        "Message": body.get("Message"),
-        "Date": body.get("Date"),
-        "Time": body.get("Time"),
-        "Waifu": body.get("WaifuID"),
-        "ConversationID": body.get("ConversationID"),
-    }
 
-    api_response = agent.appProxy(dataObject)
+    api_response = agent.appProxy(body)
 
     if api_response is False:
-        return f"Cannot message {dataObject["Waifu"]} at the moment."
+        pass
+
     return api_response.get('Response')
 
 
-@app.post("/saveMessage")
+@app.post("/saveData")
 async def read_request(request: Request):
     
     body = await request.json()
 
-    UserID = body.get("userID")
-    Message = body.get("message")
-    Date = body.get("messageDate")
+    data_mode = {
+        "Text": "",
+        "Audio": "",
+        "Image": "",
+        "Video": "",
+        "Sensory": ""
+    }
 
-    payload = {"userID": UserID, "message": Message, "messageDate": Date}
+    payload = ""
+
     with open("python_javascript_bridge.json", "w", encoding="utf-8") as File:
         json.dump(payload, File)
 
-@app.post("/loadMessage")
+@app.post("/loadData")
 async def read_request(request: Request):
 
     body = await request.json()
 
-    UserID = body.get("userID")
 
     # Return stored data for the given user if available
     # THIS ONE SOON
@@ -70,12 +66,11 @@ async def read_request(request: Request):
         data = {}
     return data
 
-@app.post("/loadConversationHistory")
+
+@app.post("/loadMemory")
 async def read_request(request: Request):
 
     body = await request.json()
-
-    UserID = body.get("userID")
 
     try:
         with open("python_javascript_bridge.json", "r", encoding="utf-8") as File:
@@ -84,7 +79,7 @@ async def read_request(request: Request):
         data = {}
     return data
 
-@app.post("/testChat")
+@app.post("/test")
 async def read_request(request: Request):
 
     body = await request.json()

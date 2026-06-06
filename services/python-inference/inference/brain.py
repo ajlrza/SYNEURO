@@ -1,3 +1,10 @@
+import os
+import json
+import subprocess
+from openai import OpenAI
+from groq import Groq
+from dotenv import load_dotenv
+
 class agentManager:
       user = ""
       message = ""
@@ -56,47 +63,7 @@ class agentManager:
                return message_response
           else:
                return "Message cannot be empty."
-
-# Default mode network of the agent brain
-class DFMNetwork:
-     def __init__(self, agentOutput):
-          pass
-# Executive function
-class CENetwork:
-     def __init__(self, agentOutput):
-          pass
-# Manages DFM and CEN
-class SALNetwork:
-     def __init__(self, DFMCENObject):
-          pass
-# Sensorimotor function
-class SENNetwork:
-     # Responsible for communication processing
-     def __init__(self, agentOutput, userOutput):
-          pass
-class VISNetwork:
-     def __init__(self):
-          pass
-class LIMNetwork:
-     # Responsible for  Deeply involved in the emotional center of the brain; it regulates mood, emotional responses, motivation, and memory formation.
-     def __init__(self, agentOutput, userOutput):
-          self.Happy = 0
-          self.Sad = 0
-          self.Disgust = 0
-          self.Fear = 0
-          self.Anger = 0
-          self.Surprise = 0
-          pass
-     # The Thalamo-Amygdala Pathway
-
-     # Since there are 100feeelings, itsmost likely 
-class VENNetwork:
-     # Unexpected attention awareness, randomness
-     def __init__(self):
-          pass
-
-# Brain - orchestrates each class (brain parts)
-# Though I may change the architecture if it scales up
+          
 class agentBrain:
      # Configure the brain
      DFM = DFMNetwork()
@@ -106,4 +73,45 @@ class agentBrain:
      VIS = VISNetwork()
      LIM = LIMNetwork()
      VEN = VENNetwork()
-     pass
+
+load_dotenv() 
+
+client = Groq(
+    api_key=os.getenv("GROQ_API_KEY"),
+)
+
+def appProxy(dataObject: object):
+
+    # Inside the object
+    UserID = dataObject["UserID"]
+    Message = dataObject["Message"]
+    Date = dataObject["Date"]
+    Time = dataObject["Time"]
+    Waifu = dataObject["Waifu"]
+    ConversationID = dataObject["ConversationID"]
+
+    # Start db listener
+    dbListener = subprocess.run(["npx", "ts-node", "database_communication/db_server.ts"])
+
+    # Write to JSON
+    with open("bridge.json", "r") as file:
+        data = json.load(file)
+    data["Communication"]["Object"] = dataObject
+    data["Communication"]["Written"] = True
+    with open("bridge.json", "w") as file:
+        json.dump(data, file, indent=4)
+
+    # Check JSON
+    with open("bridge.json", "r") as file:
+        data = json.load(file)
+        #soon
+
+    groq_app = agent_classes.agentManager(UserID)
+    
+    # Change soon
+
+    talk_to_groq = groq_app.chatGroq(client, UserID, sys_prompt.kurisu_personality_prompt("Lore"), sys_prompt.kurisu_personality_prompt("Personality"), message)
+    
+    return talk_to_groq
+
+        
