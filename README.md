@@ -16,7 +16,7 @@
 
 ## 📖 Overview
 
-Syneuro Engine is a high-performance distributed AFC (Affective Computing) middleware designed to bridge stateless Large Language Models (LLMs) with dynamic, real-time environments. Rather than relying on static prompt chains, Animus orchestrates AI behavior using a **neuro-inspired cognitive architecture**, routing tasks through distinct "brain networks" (Executive, Salience, Limbic, etc.) based on real-time stimuli.
+Syneuro Engine is a high-performance distributed Affective Computing (AFC) middleware designed to bridge stateless Foundation Models (LLMs, VLMs, and audio models) with dynamic, real-time environments.
 
 Purpose-built for virtual agents and embodied AI (robotics, edge devices), Animus handles temporal continuity, affective computing, and high-throughput sensory data ingestion with sub-millisecond coordination and deterministic state serialization.
 
@@ -49,7 +49,7 @@ At the core of the Python inference pipeline is the `agentBrain`, which orchestr
        │                   
        │
        ├─► [OpenCV] ---> Extracts facial points & visual context
-       ├─► [Groq API]        ---> Sub-50ms inference & `AgentBrain` network routing
+       ├─► [AI Model]  ---> Main AI model 
        │
        ▼
  [Kafka State Topic]  ---> (Decoupled stream buffer for memory & state)
