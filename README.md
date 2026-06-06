@@ -41,6 +41,9 @@ At the core of the Python inference pipeline is the `agentBrain`, which orchestr
 [User App / Webcams]
        │ (WebRTC connection: UDP, zero head-of-line blocking)
        ▼
+  [FastAPI Server]    ---> Handles ultra-low latency A/V routing & VAD
+       │
+       ▼
   [LiveKit Server]    ---> Handles ultra-low latency A/V routing & VAD
        │
        ▼
