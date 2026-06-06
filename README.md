@@ -39,7 +39,24 @@ At the core of the Python inference pipeline is the `agentBrain`, which orchestr
 * **Stateful Memory Management (Go):** A concurrent, race-free persistence layer that actively manages and injects context windows into the cognitive networks.
 * **Low-Latency Streaming Pipeline:** Pipes chunked LLM tokens directly from upstream inference (e.g., Groq API) through the transport layer to the WebSocket client.
 
----
+[User App / Webcams]
+       │ (WebRTC connection: UDP, zero head-of-line blocking)
+       ▼
+  [LiveKit Server]    ---> Handles ultra-low latency A/V routing & VAD
+       │
+       ▼
+[Python Agent Worker] ---> Pipecat 
+       │                   
+       │
+       ├─► [OpenCV] ---> Extracts facial points & visual context
+       ├─► [Groq API]        ---> Sub-50ms inference & `AgentBrain` network routing
+       │
+       ▼
+ [Kafka State Topic]  ---> (Decoupled stream buffer for memory & state)
+       │
+       ▼
+   [Go Engine]        ---> Handles long-term memory, state serialization, and context injection
+
 
 ## 🚀 Getting Started
 
