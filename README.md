@@ -18,7 +18,7 @@ Syneuro Engine is a high-performance distributed Affective Computing (AFC) middl
 
 Purpose-built for virtual agents and embodied AI (robotics, edge devices), Animus handles temporal continuity, affective computing, and high-throughput sensory data ingestion with sub-millisecond coordination and deterministic state serialization.
 
-## 🧠 The Agent Brain (Cognitive Architecture)
+## Cognitive Architecture
 
 At the core of the Python inference pipeline is the `agentBrain`, which orchestrates LLM calls and state updates across seven distinct sub-networks, mimicking human cognitive processing:
 
@@ -30,7 +30,7 @@ At the core of the Python inference pipeline is the `agentBrain`, which orchestr
 * **`VISNetwork` (Visual):** Dedicated to processing visual inputs, computer vision arrays, and spatial awareness feeds.
 * **`VENNetwork` (Ventral Attention):** The interrupt handler. Manages sudden environmental shifts, unexpected attention grabs, and introduces necessary behavioral randomness.
 
-## ✨ Systems Infrastructure
+## Systems Infrastructure
 
 * **Custom IPC Bridge:** A slot-based Inter-Process Communication mechanism bypassing HTTP/gRPC overhead, routing telemetry across Go, Python, and TypeScript with ultra-low latency.
 * **Event-Driven Messaging (Kafka):** Ingests concurrent sensor/input data and decouples text generation from state persistence, ensuring strict event sequencing.
@@ -55,8 +55,6 @@ At the core of the Python inference pipeline is the `agentBrain`, which orchestr
        ▼
    [Go Engine]        ---> Handles long-term memory, state serialization, and context injection
 
-
-## 🚀 Getting Started
 
 ### Prerequisites
 * [Docker](https://www.docker.com/) & Docker Compose
