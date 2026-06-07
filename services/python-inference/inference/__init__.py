@@ -6,7 +6,7 @@ import json
 # Server 
 
 origins = [
-    "https://digital-sanctuary-kappa.vercel.app",
+    "",
 ]
 
 app = FastAPI()
