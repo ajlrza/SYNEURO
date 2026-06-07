@@ -49,6 +49,9 @@ At the core of the Python inference pipeline is the `agentBrain`, which orchestr
 [Python Agent Worker] ---> (Pipecat Orchestrator & Cognitive Networks)
        │                   
        ├─► [OpenCV / Local SLM] ---> Extracts context & calculates Affective State
+       ├─► [7 Network Modules] ---> Main Affective Computing Engine
+       ├─► [RL-Policy] ---> Neural Spike Reward System
+       ├─► [User-defined RAG] ---> Context-awareness
        ├─► [Groq API / LLM]     ---> Main Foundational Model (Reasoning Hub)
        │
        ▼
