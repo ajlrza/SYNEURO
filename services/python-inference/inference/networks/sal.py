@@ -2,6 +2,7 @@ import contextRAG
 import CENNetwork
 
 class SALNetwork:
+     RAG
      environmentalData = []
      attentionList = []
      currentAttention = {}
@@ -27,10 +28,19 @@ class SALNetwork:
                
           while (True):
                CEN.pushAttention(self.attentionList[taskCount]
+               if (self.RAG.workingMemory() <= 100):
+                  self.RAG.addMemory(attentionList[taskCount - 1]
                if (CEN.checkAttention == False):
                    continue
                else:
-                   attentionList.pop(taskCount)
-                   taskCount += 1
+               # Note: Attention is the data from user, should SLM be involved here hm
+                  if (self.RAG.workingMemory() != "Full"): 
+                     self.RAG.addMemory(attentionList[taskCount])
+                     attentionList.pop(taskCount)
+                     taskCount += 1
+                  else:
+                     self.RAG.addTempMemory(attentionList[taskCount]
+                     attentionList.pop(taskCount)
+                     taskCount += 1
                
                
