@@ -15,7 +15,7 @@
 
 Syneuro Engine is a high-performance distributed Affective Computing (AFC) middleware designed to bridge stateless Foundation Models (LLMs, VLMs, and audio models) with dynamic, real-time environments.
 
-Purpose-built for virtual agents and embodied AI (robotics, edge devices), Animus handles temporal continuity, affective computing, and high-throughput sensory data ingestion with sub-millisecond coordination and deterministic state serialization.
+Purpose-built for virtual agents and embodied AI (robotics, edge devices), Syneuro handles temporal continuity, affective computing, and high-throughput sensory data ingestion with sub-millisecond coordination and deterministic state serialization.
 
 ## Cognitive Architecture
 
@@ -32,13 +32,13 @@ At the core of the Python inference pipeline is the `agentBrain`, which orchestr
 ## Systems Infrastructure
 
 * **Custom IPC Bridge:** A slot-based Inter-Process Communication mechanism bypassing HTTP/gRPC overhead, routing telemetry across Go, Python, and TypeScript with ultra-low latency.
-* **Event-Driven Messaging (Kafka):** Ingests concurrent sensor/input data and decouples text generation from state persistence, ensuring strict event sequencing.
+* **Swappable Event Broker (Asyncio / Kafka):** Built on the Strategy Pattern, the messaging layer is environment-configurable. It utilizes Python's native `asyncio.Queue` and Go channels for ultra-low latency, zero-overhead local MVP deployments, and seamlessly hot-swaps to Apache Kafka or Redpanda for distributed, high-throughput hardware.
 * **Stateful Memory Management (Go):** A concurrent, race-free persistence layer that actively manages and injects context windows into the cognitive networks.
 * **Low-Latency Streaming Pipeline:** Pipes chunked LLM tokens directly from upstream inference (e.g., Groq API) through the transport layer to the WebSocket client.
 
-```
-[User App / Webcams]
-       │ (WebRTC connection: UDP, zero head-of-line blocking)
+```text
+[User App / Digital Avatar / Webcams]
+       │ (WebRTC / WebSockets: zero head-of-line blocking)
        ▼
   [FastAPI Server]    ---> Handles ultra-low latency A/V routing & VAD
        │
@@ -46,14 +46,13 @@ At the core of the Python inference pipeline is the `agentBrain`, which orchestr
   [LiveKit Server]    ---> Handles ultra-low latency A/V routing & VAD
        │
        ▼
-[Python Agent Worker] ---> (Pipecat Orchestrator)
+[Python Agent Worker] ---> (Pipecat Orchestrator & Cognitive Networks)
        │                   
-       ├─► [OpenCV]        ---> Extracts facial points & visual context
-       ├─► [AI Model]      ---> Main Foundational Model (Reasoning Hub)
+       ├─► [OpenCV / Local SLM] ---> Extracts context & calculates Affective State
+       ├─► [Groq API / LLM]     ---> Main Foundational Model (Reasoning Hub)
        │
        ▼
- [Kafka State Topic]  ---> (Decoupled stream buffer for memory & state)
-       │
+[Event Broker Interface] ---> (Configurable via .env: Native Asyncio Queue OR Kafka)
+       │                      (Decouples sensory stream from state persistence)
        ▼
    [Go Engine]        ---> Handles long-term memory, state serialization, and context injection
-```
