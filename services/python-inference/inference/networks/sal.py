@@ -1,5 +1,4 @@
-import contextRAG
-import CENNetwork
+from network_imports import networkBuilder 
 
 class SALNetwork:
      RAG
@@ -20,14 +19,14 @@ class SALNetwork:
      def divertAttention(self):
           attentionCount = 0
           taskCount = 0
-          CEN = CENNetwork()
+          CENBuild = networkBuilder("CEN")
+          CEN = CENBuild(self.environmentalData)
           
           for attention in self.attentionList:
                attentionCount += 1
-               currentAttention[attentionCount] = attention
+               self.currentAttention[attentionCount] = attention
                
           while (True):
-               CEN.pushAttention(self.attentionList[taskCount]
                if (self.RAG.workingMemory() <= 100):
                   self.RAG.addMemory(attentionList[taskCount - 1]
                if (CEN.checkAttention == False):
@@ -43,4 +42,9 @@ class SALNetwork:
                      attentionList.pop(taskCount)
                      taskCount += 1
                
+     async def storeAttention(self, attentionList: list, taskCount):
+          attentionList = attentionList
+          await addAttention = CEN.pushAttention(self.attentionList, taskCount)
+          return addAttention
+     
                

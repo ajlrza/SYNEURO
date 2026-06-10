@@ -1,3 +1,6 @@
+from network_imports import networkBuilder
+import workingMemory
+
 # Executive function
 def filterModalities(Modalities: object):
      acceptedModalities = [
@@ -20,12 +23,11 @@ def filterModalities(Modalities: object):
      
 
 class CENetwork:
-    # Class hint
+
     agentOutput: any
 
     def __init__(self, agentOutput: object):
-        # Assuming agentOutput.Modalities is a LIST like ["Text", "Video"]
-        # Check if we have at least 2 modalities (length of the list)
+ 
         if len(agentOutput.Modalities) >= 2:
             
             if self.__filterModalities(agentOutput.Modalities):
@@ -35,11 +37,10 @@ class CENetwork:
         else:
             raise ValueError("CENetwork requires at least 2 modalities.")
 
-    # Made this a private method inside the class
+
     def __filterModalities(self, modalities_list: list) -> bool:
-        accepted_modalities = {"Text", "Audio", "Video", "Image", "VideoSensor"} # Using a set is faster
-        
-        # Check if ANY of the incoming modalities match our accepted set
+        accepted_modalities = {"Text", "Audio", "Video", "Image", "VideoSensor"} 
+
         valid_count = sum(1 for m in modalities_list if m in accepted_modalities)
         
         return valid_count >= 1
@@ -65,5 +66,13 @@ class CENetwork:
         Fuses multimodal spike trains before the Central Executive reasons over them.
         """
         fused_state = {}
-        # Logic to merge visual_spikes and text_spikes would go here
+
         return fused_state
+    
+    async def pushAttention(attentionList: list, taskCount: int):
+        for attention in attentionList:
+            workingMemory.append(attention)
+            # Metadata to track how many attention is being held in working memory
+            workingMemory.count(1)
+        # For networks to know
+        return workingMemory
