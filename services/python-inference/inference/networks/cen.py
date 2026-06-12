@@ -1,4 +1,6 @@
 from network_imports import networkBuilder
+import time
+import numpy as np
 import workingMemory
 
 # Executive function
@@ -76,3 +78,24 @@ class CENetwork:
             workingMemory.count(1)
         # For networks to know
         return workingMemory
+    
+    def attentionCheck(self, saved_state_vector: np.array, last_timestamp: time, decay_rate: float):
+        """
+        Applies exponential decay to the emotional vector based on elapsed time.
+        Brings extreme emotions back toward 0 (Neutral).
+        """
+        current_time = time.time()
+        time_delta_seconds = current_time - last_timestamp
+        decay_factor = 0
+
+        if (time_delta_seconds < current_time and decay_rate >= 1.0): 
+            pass
+
+            #approaches 0
+        if (time_delta_seconds > current_time and decay_rate <= 0): 
+            self.decay_factor = np.exp(-decay_rate * time_delta_seconds)
+
+        decayed_state = saved_state_vector * decay_factor
+        return decayed_state
+
+
