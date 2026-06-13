@@ -40,14 +40,14 @@ class CENetwork:
             raise ValueError("CENetwork requires at least 2 modalities.")
 
 
-    def __filterModalities(self, modalities_list: list) -> bool:
+    def __filter_modalities(self, modalities_list: list) -> bool:
         accepted_modalities = {"Text", "Audio", "Video", "Image", "VideoSensor"} 
 
         valid_count = sum(1 for m in modalities_list if m in accepted_modalities)
         
         return valid_count >= 1
 
-    def __handleTextOutput(self, userText: str) -> dict:
+    def __handle_text_output(self, userText: str) -> dict:
         Spike = False
         TRE_Neurons = {}
         
@@ -71,7 +71,7 @@ class CENetwork:
 
         return fused_state
     
-    async def pushAttention(attentionList: list, taskCount: int):
+    async def push_attention(attentionList: list, taskCount: int):
         for attention in attentionList:
             workingMemory.append(attention)
             # Metadata to track how many attention is being held in working memory
@@ -79,7 +79,7 @@ class CENetwork:
         # For networks to know
         return workingMemory
     
-    def attentionCheck(self, saved_state_vector: np.array, last_timestamp: time, decay_rate: float):
+    def attention_check(self, saved_state_vector: np.array, last_timestamp: time, decay_rate: float):
         """
         Applies exponential decay to the emotional vector based on elapsed time.
         Brings extreme emotions back toward 0 (Neutral).

@@ -10,29 +10,36 @@ class sensoryOutput:
      Audio: bytearray
      Video: bytearray # or ndarray? bytearray is temp
 
-class emotionState:
+class quantumEmotion:
      emotionalState: np.array = ([[]])
      affectiveState: dict
 
      def __init__(self, affectiveState: dict):
           self.affectiveState = affectiveState
 
-     def quantumCompute(self):
-          quantumStates: dict
-          amplitudeA: int = 0
-          amplitudeB: int = 0
-          basisVectorA: np.array = [[1]]
-          basisVectorB: np.array = [[0]]
-          quantumEmotion = amplitudeA * basisVectorA + amplitudeB * basisVectorB
+     def compute_emotion_superposition(self, amplitudeA, amplitudeB):
+          cdtype = np.complex128
+          ketA= np.array([[1],
+                         [0]], dtype=cdtype)
+          ketB = np.array([[0],
+                         [1]], dtype=cdtype)
+          quantumEmotion = (amplitudeA * ketA) + (amplitudeB * ketB)
+          return quantumEmotion
 
-          #LOOP?
-          #for state in self.affectiveState:
-          # need pauli-Xgate operations
-          # controlled rotation opeartion
-          # emotion vector space
-          #Emotion Fusion Complexity Formula
+     def compute_emotion_transition(self, stimulus, emotionState):
+          # Make sure matrix is unitary
+          transitionState = stimulus * emotionState
+          #how inverse?
+          pass
 
-          # basically the output is the semantics from slm
+     #LOOP?
+     #for state in self.affectiveState:
+     # need pauli-Xgate operations
+     # controlled rotation opeartion
+     # emotion vector space
+     #Emotion Fusion Complexity Formula
+
+     # basically the output is the semantics from slm
 
 
 class LIMNetwork:
@@ -51,7 +58,7 @@ class LIMNetwork:
           self.sensoryOutput = sensoryOutput()
 
      # The Thalamo-Amygdala Pathway
-     def thalamoAmygdala(self, sensoryData: list):
+     def thalamo_amygdala(self, sensoryData: list):
           for data in sensoryData:
                match type(data).__name__:
                     # might need to scale, could we handle tons of data, or for MVP, this one would do?

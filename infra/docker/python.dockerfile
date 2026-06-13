@@ -11,6 +11,8 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
+    py -m pip install numpy \
+    py -m pip install groq \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python libraries using pip3

@@ -6,7 +6,7 @@ from sen import SENNetwork
 from ven import VENNetwork
 from vis import VISNetwork
 
-def networkBuilder(networkChoice):
+def network_builder(networkChoice):
     networkModules = {
         "CEN": CENetwork,
         "DFM": DFMNetwork,

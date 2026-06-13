@@ -1,4 +1,4 @@
-from network_imports import networkBuilder 
+from network_imports import network_builder 
 
 class SALNetwork:
      RAG
@@ -10,16 +10,16 @@ class SALNetwork:
           self.environmentalData.append(rawData)
           # Get current status of user activity
 
-     def signalNetwork(self) -> None:
+     def signal_network(self) -> None:
           RAG = contextRAG(self.environmentalData)
           for state, data in enumerate(RAG):
                if (state == "Focus"):
                     self.attentionList.append(data)
                     
-     def divertAttention(self):
+     def divert_attention(self):
           attentionCount = 0
           taskCount = 0
-          CENBuild = networkBuilder("CEN")
+          CENBuild = network_builder("CEN")
           CEN = CENBuild(self.environmentalData)
           
           for attention in self.attentionList:
@@ -27,24 +27,24 @@ class SALNetwork:
                self.currentAttention[attentionCount] = attention
                
           while (True):
-               if (self.RAG.workingMemory() <= 100):
-                  self.RAG.addMemory(attentionList[taskCount - 1]
+               if (self.RAG.working_memory() <= 100):
+                  self.RAG.addMemory(self.attentionList[taskCount - 1]
                if (CEN.checkAttention == False):
                    continue
                else:
                # Note: Attention is the data from user, should SLM be involved here hm
-                  if (self.RAG.workingMemory() != "Full"): 
-                     self.RAG.addMemory(attentionList[taskCount])
+                  if (self.RAG.working_memory() != "Full"): 
+                     self.RAG.add_memory(attentionList[taskCount])
                      attentionList.pop(taskCount)
                      taskCount += 1
                   else:
-                     self.RAG.addTempMemory(attentionList[taskCount]
+                     self.RAG.add_temp_memory(attentionList[taskCount]
                      attentionList.pop(taskCount)
                      taskCount += 1
                
-     async def storeAttention(self, attentionList: list, taskCount):
+     async def store_attention(self, attentionList: list, taskCount):
           attentionList = attentionList
-          await addAttention = CEN.pushAttention(self.attentionList, taskCount)
+          await addAttention = CEN.push_attention(self.attentionList, taskCount)
           return addAttention
      
                
