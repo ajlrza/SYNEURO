@@ -10,26 +10,77 @@ class sensoryOutput:
      Audio: bytearray
      Video: bytearray # or ndarray? bytearray is temp
 
+class bloch:
+     blochVector: np.array = ([[[]]])
+     x = np.linspace(0, 30, 45, 60, 90)
+     y = np.linspace(0, 30, 45, 60, 90)
+     z = np.linspace(0, 30, 45, 60, 90)
+     coords: list
+
+     '''
+     Z-axis - emotional intensity
+     X, Y axis - affective states
+     '''
+
+     def __init__(self):
+          self.X, self.Y, self.Z = np.meshgrid(self.x, self.y, self.z, indexing="ij")
+          self.coords = np.stack((self.X, self.Y, self.Z), axis=1)
+          pass
+
+     def check_normalization(self) -> bool:
+          if (abs(self.ketA) + abs(self.ketB) == 1):
+               return True
+
+     def compute_bloch_sphere(self, x: float, y: float, z: float):
+          # should it be able to track previous bloch sphre values?
+          pass
+
+     # need quantum logic gates soon, refactor everything, and re-logi
+
+          
+angles = {
+     0: np.radians(0),
+     30: np.radians(30),
+     45: np.radians(45),
+     60: np.radians(60),
+     90: np.radians(90)
+}
+
+def get_emotional_state(degree: int) -> float:
+     if degree not in angles:
+          raise ValueError("Degree not found.")
+     
+     xi = angles[degree]
+
+     amp_0: float = np.cos(xi)
+     amp_1: float  = np.sin(xi)
+
+     return amp_0, amp_1
+
 class quantumEmotion:
-     emotionalState: np.array = ([[]])
+     emotionalState: float
      affectiveState: dict
+     blochVector: np.array = ([[[]]])
 
      def __init__(self, affectiveState: dict):
           self.affectiveState = affectiveState
 
-     def compute_emotion_superposition(self, amplitudeA, amplitudeB):
+     def compute_emotion_superposition(self, amp_0, amp_1) -> np.complex128:
           cdtype = np.complex128
-          ketA= np.array([[1],
+          ket_0 = np.array([[1],
                          [0]], dtype=cdtype)
-          ketB = np.array([[0],
+          ket_1 = np.array([[0],
                          [1]], dtype=cdtype)
-          quantumEmotion = (amplitudeA * ketA) + (amplitudeB * ketB)
+          quantumEmotion = (amp_0 * ket_0) + (amp_1 * ket_1)
           return quantumEmotion
 
      def compute_emotion_transition(self, stimulus, emotionState):
           # Make sure matrix is unitary
           transitionState = stimulus * emotionState
           #how inverse?
+          pass
+
+     def compute_emotion_state():
           pass
 
      #LOOP?
@@ -40,7 +91,6 @@ class quantumEmotion:
      #Emotion Fusion Complexity Formula
 
      # basically the output is the semantics from slm
-
 
 class LIMNetwork:
      client: str
