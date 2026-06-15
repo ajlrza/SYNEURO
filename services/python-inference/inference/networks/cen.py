@@ -89,13 +89,14 @@ class CENetwork:
         decay_factor = 0
 
         if (time_delta_seconds < current_time and decay_rate >= 1.0): 
-            pass
+            return False
 
             #approaches 0
         if (time_delta_seconds > current_time and decay_rate <= 0): 
             self.decay_factor = np.exp(-decay_rate * time_delta_seconds)
 
         decayed_state = saved_state_vector * decay_factor
+        
         return decayed_state
 
 

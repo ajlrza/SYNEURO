@@ -1,9 +1,13 @@
 import os
 import json
+import time
 import numpy as np
 from network_imports import networkBuilder 
 from groq import Groq
 from enum import Enum
+
+CENClass = networkBuilder("CEN")
+CEN = CENClass()
 
 class sensoryOutput:
      Text: str = ""
@@ -108,19 +112,47 @@ class LIMNetwork:
           self.sensoryOutput = sensoryOutput()
 
      # The Thalamo-Amygdala Pathway
-     def thalamo_amygdala(self, sensoryData: list):
-          for data in sensoryData:
-               match type(data).__name__:
-                    # might need to scale, could we handle tons of data, or for MVP, this one would do?
-                    case "str":
-                         sensoryOutput.Text = data
-                    case "bytearray":
-                         sensoryOutput.Audio = data
-                    case "np.array":
-                         sensoryOutput.Video = data
-          
-          extractAffectiveState = self.extract_affective_state(sensoryOutput.Text)
+     async def thalamus(self, sensoryData: dict):
 
+          def check_attention(saved_state_vector: np.array, last_timestamp: time, decay_rate: float):
+               attentionDecay = CEN.attentionCheck(saved_state_vector, timestamp, decay_rate)
+               if (attentionDecay):
+                    return attentionDecay
+               else:
+                    return False
+
+          # Emotional stimulus processing
+          for timestamp, sensorData in sensoryData.items:
+               match type(sensorData).__name__:
+                    # might need to scale, could we handle tons of data, or for MVP, this one would do?
+                    
+                    # ASYNCIO FOR DATA FLOW, NETWORKING, AND COMMUNICATION
+                    # MULTIPROCESSING MODULE FOR MATRIX, MATH, AND OPTMIZE, ANYTHING IN NUMPY, NN
+
+                    case "str":
+                         sensoryOutput.Text = sensorData
+                         self.amygdala(sensoryOutput.Text)
+                         attentionGate = check_attention(self.saved_state_vector, timestamp, self.decay_rate)
+                         pushAttention = await CEN.push_attention(attentionGate, sensorData)
+                    case "bytearray":
+                         # sensoryOutput is a class because the brain will also check it, be used in other areas
+                         sensoryOutput.Audio = sensorData
+                         self.amygdala(sensoryOutput.Audio)
+                         attentionGate = check_attention(self.saved_state_vector, timestamp, self.decay_rate)
+                         await pushAttention = await CEN.push_attention(attentionGate, sensorData)
+                    case "np.array":
+                         sensoryOutput.Video = sensorData
+                         self.amygdala(sensoryOutput.Video)
+                         attentionGate = check_attention(self.saved_state_vector, timestamp, self.decay_rate)
+                         await pushAttention = await CEN.push_attention(attentionGate, sensorData)
+          
+          # Memory formation
+
+                    
+     def amygdala(self, emotionalStimulus: any):
+
+          extractAffectiveState = self.extract_affective_state(emotionalStimulus)
+          pass
                     
      def extract_affective_state(self, user_text: str) -> np.ndarray:
    
