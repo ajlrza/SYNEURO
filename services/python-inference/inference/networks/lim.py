@@ -1,6 +1,7 @@
 import os
 import json
 import time
+import asyncio
 import numpy as np
 from network_imports import networkBuilder 
 from groq import Groq
@@ -114,7 +115,7 @@ class LIMNetwork:
      # The Thalamo-Amygdala Pathway
      async def thalamus(self, sensoryData: dict):
 
-          def check_attention(saved_state_vector: np.array, last_timestamp: time, decay_rate: float):
+          def check_attention(saved_state_vector, last_timestamp, decay_rate):
                attentionDecay = CEN.attentionCheck(saved_state_vector, timestamp, decay_rate)
                if (attentionDecay):
                     return attentionDecay
@@ -133,18 +134,18 @@ class LIMNetwork:
                          sensoryOutput.Text = sensorData
                          self.amygdala(sensoryOutput.Text)
                          attentionGate = check_attention(self.saved_state_vector, timestamp, self.decay_rate)
-                         pushAttention = await CEN.push_attention(attentionGate, sensorData)
+                         asyncio.create_task(CEN.push_attention(attentionGate, sensorData))
                     case "bytearray":
                          # sensoryOutput is a class because the brain will also check it, be used in other areas
                          sensoryOutput.Audio = sensorData
                          self.amygdala(sensoryOutput.Audio)
                          attentionGate = check_attention(self.saved_state_vector, timestamp, self.decay_rate)
-                         await pushAttention = await CEN.push_attention(attentionGate, sensorData)
-                    case "np.array":
+                         asyncio.create_task(CEN.push_attention(attentionGate, sensorData))
+                    case "ndarray":
                          sensoryOutput.Video = sensorData
                          self.amygdala(sensoryOutput.Video)
                          attentionGate = check_attention(self.saved_state_vector, timestamp, self.decay_rate)
-                         await pushAttention = await CEN.push_attention(attentionGate, sensorData)
+                         asyncio.create_task(CEN.push_attention(attentionGate, sensorData))
           
           # Memory formation
 
