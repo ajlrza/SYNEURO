@@ -100,6 +100,7 @@ class quantumEmotion:
 class LIMNetwork:
      client: str
      sensoryOutput: any
+     agentEmotion = quantumEmotion()
 
      # Responsible for  Deeply involved in the emotional center of the brain; it regulates mood, emotional responses, motivation, and memory formation.
      def __init__(self, agentOutput, networksOutput):
@@ -113,7 +114,7 @@ class LIMNetwork:
           self.sensoryOutput = sensoryOutput()
 
      # The Thalamo-Amygdala Pathway
-     async def thalamus(self, sensoryData: dict):
+     def thalamus(self, sensoryData: dict):
 
           def check_attention(saved_state_vector, last_timestamp, decay_rate):
                attentionDecay = CEN.attentionCheck(saved_state_vector, timestamp, decay_rate)
@@ -148,10 +149,18 @@ class LIMNetwork:
                          asyncio.create_task(CEN.push_attention(attentionGate, sensorData))
           
           # Memory formation
+          check_emotion_states = self.agentEmotion.affectiveState
+          # Runs in background
+          # If working memory and current emotion are linked
+          # through high stimulus
+          # It becomes long-term memory
+          # will refactor soon
+          form_long_term_memories = asyncio.create_task([CEN.get_working_memory() ** stimulus for stimulus in
+          check_emotion_states.items if stimulus > self.saved_state_vector])
 
                     
      def amygdala(self, emotionalStimulus: any):
-
+          #background? 
           extractAffectiveState = self.extract_affective_state(emotionalStimulus)
           pass
                     
