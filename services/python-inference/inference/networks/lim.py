@@ -99,19 +99,25 @@ class quantumEmotion:
 
 class LIMNetwork:
      client: str
-     sensoryOutput: any
-     agentEmotion = quantumEmotion()
+     sensor: sensoryOutput
+     emotion: quantumEmotion
+     emotionDict: dict 
 
      # Responsible for  Deeply involved in the emotional center of the brain; it regulates mood, emotional responses, motivation, and memory formation.
-     def __init__(self, agentOutput, networksOutput):
-          self.Happy = 0
-          self.Sad = 0
-          self.Disgust = 0
-          self.Fear = 0
-          self.Anger = 0
-          self.Surprise = 0
+     def __init__(self, appOutput: dict, networksOutput: dict):
           self.client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
-          self.sensoryOutput = sensoryOutput()
+          self.sensor = sensoryOutput()
+          self.emotion = quantumEmotion()
+          self.emotionDict = {
+          "Happy": 0,
+          "Sad": 0,
+          "Disgust": 0,
+          "Fear": 0,
+          "Anger": 0,
+          "Surprise": 0,
+          }
+          self.thalamus(appOutput)
+
 
      # The Thalamo-Amygdala Pathway
      def thalamus(self, sensoryData: dict):

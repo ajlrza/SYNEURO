@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from . import agent
+from . import brain
 import json
 
 # Server 
@@ -25,7 +25,7 @@ async def read_request(request: Request):
     body = body or {}
 
 
-    api_response = agent.appProxy(body)
+    api_response = brain.syneuro_inference
 
     if api_response is False:
         pass

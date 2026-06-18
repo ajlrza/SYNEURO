@@ -78,7 +78,7 @@ class CENetwork:
             workingMemory.count(1)
         # For networks to know
         return workingMemory
-    
+
     def attention_check(self, saved_state_vector: np.array, last_timestamp: time, decay_rate: float):
         """
         Applies exponential decay to the emotional vector based on elapsed time.
