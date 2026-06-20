@@ -24,29 +24,17 @@ class Brain:
      LIM = LIMBuild()
      VEN = VENBuild()
 
-     task_count = 0
      app_output = {}
 
      def __init__(self, app_output: object):
          self.app_output = app_output
-         if 'tasks' in app_output:
-          self.task_count = len(app_output['tasks'])
-         
-     async def track_attention(self):
-         task_attentions = list(self.app_output['tasks'].values())
-         track_attention = await self.CEN.push_attention(task_attentions, self.task_count)
-         return track_attention
 
-
-load_dotenv() 
-
-client = Groq(
-    api_key=os.getenv("GROQ_API_KEY"),
-)
-
-async def syneuro_inference(app_output: object):
+async def syneuro_inference(app_output: object, api_key: str):
     brain_management = Brain(app_output)
+
     tracked_attention = brain_management.track_attention()
+    init_emotion = brain_management.LIM(brain_management.app_output, api_key)
+    process_emotion_stimulus = brain_management.LIM.amygdala()
     
 
 

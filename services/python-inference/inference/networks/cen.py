@@ -62,6 +62,7 @@ class CENetwork:
 
         return TRE_Neurons 
 
+    # Posterior Parietal Cortex 
     def PPC(self, visual_spikes: dict, text_spikes: dict) -> dict:
         """
         Posterior Parietal Cortex layer.
@@ -71,6 +72,8 @@ class CENetwork:
 
         return fused_state
     
+
+    # Dorsolateral Prefrontal Cortex
     async def push_attention(attentionList: list, taskCount: int):
         for attention in attentionList:
             workingMemory.append(attention)
