@@ -1,50 +1,52 @@
 from network_imports import network_builder 
+import RAG
+
 
 class SALNetwork:
-     RAG
-     environmentalData = []
-     attentionList = []
-     currentAttention = {}
+     cen_class = network_builder("CEN")
+     cen = cen_class()
+     RAG: RAG.instance
+     environmental_data = []
+     attention_list = []
+     current_attention = {}
      
-     def __init__(self, rawData: any):
-          self.environmentalData.append(rawData)
+     def __init__(self, raw_data: any):
+          self.environmental_data.append(raw_data)
           # Get current status of user activity
 
      def signal_network(self) -> None:
-          RAG = contextRAG(self.environmentalData)
-          for state, data in enumerate(RAG):
+          RAG = self.RAG.context_rag(self.environmental_data)
+          for state, data in enumerate(self.RAG.current_context):
                if (state == "Focus"):
-                    self.attentionList.append(data)
+                    self.attention_list.append(data)
                     
      def divert_attention(self):
-          attentionCount = 0
-          taskCount = 0
-          CENBuild = network_builder("CEN")
-          CEN = CENBuild(self.environmentalData)
+          attention_count = 0
+          task_count = 0
           
-          for attention in self.attentionList:
-               attentionCount += 1
-               self.currentAttention[attentionCount] = attention
+          for attention in self.attention_list:
+               attention_count += 1
+               self.current_attention[attention_count] = attention
                
           while (True):
                if (self.RAG.working_memory() <= 100):
-                  self.RAG.addMemory(self.attentionList[taskCount - 1]
-               if (CEN.checkAttention == False):
+                  self.RAG.add_memory(self.attention_list[task_count - 1])
+               elif (cen.check_attention == False):
                    continue
                else:
                # Note: Attention is the data from user, should SLM be involved here hm
                   if (self.RAG.working_memory() != "Full"): 
-                     self.RAG.add_memory(attentionList[taskCount])
-                     attentionList.pop(taskCount)
-                     taskCount += 1
+                     self.RAG.add_memory(self.attention_list[task_count])
+                     self.attention_list.pop(task_count)
+                     task_count += 1
                   else:
-                     self.RAG.add_temp_memory(attentionList[taskCount]
-                     attentionList.pop(taskCount)
+                     self.RAG.add_temp_memory(self.attention_list[task_count])
+                     self.attention_list.pop(taskCount)
                      taskCount += 1
                
      async def store_attention(self, attentionList: list, taskCount):
           attentionList = attentionList
-          await addAttention = CEN.push_attention(self.attentionList, taskCount)
-          return addAttention
+          await add_attention = self.cen.push_attention(self.attentionList, taskCount)
+          return add_attention
      
                

@@ -1,44 +1,42 @@
 from network_imports import networkBuilder
 import time
 import numpy as np
-import workingMemory
 
 # Executive function
-def filterModalities(Modalities: object):
-     acceptedModalities = [
+def filterModalities(modalities: object):
+     accepted_modalities = [
           "Text", 
           "Audio", 
           "Video",
           "Image",
           "VideoSensor"
           ]
-     filteredModalities = []
-
-     for modality in Modalities:
-          if modality in acceptedModalities:
-               filteredModalities.append(True)
      
-     if filteredModalities >= 1:
+     filtered_modalities = []
+
+     for modality in modalities:
+          if modality in accepted_modalities:
+               filtered_modalities.append(True)
+     
+     if filtered_modalities >= 1:
           return True
      else:
           return False
      
+class CENNetwork:
+    agent_output: any
+    working_memory: dict
 
-class CENetwork:
-
-    agentOutput: any
-
-    def __init__(self, agentOutput: object):
+    def __init__(self, agent_output: object):
  
-        if len(agentOutput.Modalities) >= 2:
+        if len(agent_output.modalities) >= 2:
             
-            if self.__filterModalities(agentOutput.Modalities):
-                self.agentOutput = agentOutput
+            if self.__filter_modalities(agent_output.modalities):
+                self.agent_output = agent_output
             else:
                 raise ValueError("Modality not accepted. Only accepts Text, Audio, Video, Image, or VideoSensor.")
         else:
             raise ValueError("CENetwork requires at least 2 modalities.")
-
 
     def __filter_modalities(self, modalities_list: list) -> bool:
         accepted_modalities = {"Text", "Audio", "Video", "Image", "VideoSensor"} 
@@ -47,20 +45,19 @@ class CENetwork:
         
         return valid_count >= 1
 
-    def __handle_text_output(self, userText: str) -> dict:
-        Spike = False
-        TRE_Neurons = {}
+    def __handle_text_output(self, user_text: str) -> dict:
+        spike = False
+        tre_neurons = {}
         
-        if userText:
-            Spike = True
-            for count, text_char in enumerate(userText, start=1):
+        if user_text:
+            spike = True
+            for count, text_char in enumerate(user_text, start=1):
                 neuron_name = f"Neuron {count}"
-                if neuron_name not in TRE_Neurons:
-                    TRE_Neurons[neuron_name] = 0
-                
-                TRE_Neurons[neuron_name] += 1 * len(userText)
+                if neuron_name not in tre_neurons:
+                    tre_neurons[neuron_name] = 0 
+                tre_neurons[neuron_name] += 1 * len(user_text)
 
-        return TRE_Neurons 
+        return tre_neurons 
 
     # Posterior Parietal Cortex 
     def PPC(self, visual_spikes: dict, text_spikes: dict) -> dict:
@@ -72,15 +69,14 @@ class CENetwork:
 
         return fused_state
     
-
     # Dorsolateral Prefrontal Cortex
-    async def push_attention(attentionList: list, taskCount: int):
-        for attention in attentionList:
-            workingMemory.append(attention)
+    async def push_attention(self, attention_list: list, task_count: int):
+        for attention in attention_list:
+            self.working_memory.append(attention)
             # Metadata to track how many attention is being held in working memory
-            workingMemory.count(1)
+            self.working_memory.count(1)
         # For networks to know
-        return workingMemory
+        return self.working_memory
 
     def attention_check(self, saved_state_vector: np.array, last_timestamp: time, decay_rate: float):
         """

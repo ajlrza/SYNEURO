@@ -3,14 +3,11 @@ import json
 import time
 import asyncio
 import numpy as np
-from network_imports import networkBuilder 
+from network_imports import network_builder 
 from groq import Groq
 from enum import Enum
 
-CENClass = networkBuilder("CEN")
-CEN = CENClass()
-
-class sensoryOutput:
+class SensoryOutput:
      Text: str = ""
      Audio: bytearray
      Video: bytearray # or ndarray? bytearray is temp
@@ -31,7 +28,7 @@ def get_emotional_state(valence: float, arousal: float) -> tuple[np.complex128, 
 
     return amp_0, amp_1
 
-class quantumEmotion:
+class QuantumEmotion:
      emotional_state: float
      affective_state: np.ndarray
      stimulus_states: dict
@@ -67,27 +64,24 @@ class quantumEmotion:
         self.affective_state = self.state_vector
         pass
 
-     #LOOP?
-     #for state in self.affectiveState:
-     # need pauli-Xgate operations
-     # controlled rotation opeartion
-     # emotion vector space
-     #Emotion Fusion Complexity Formula
-
-     # basically the output is the semantics from slm
-
 class LIMNetwork:
-     client: str
-     sensor: sensoryOutput
-     emotion: quantumEmotion
-     emotionDict: dict 
+     '''
+     Responsible for  Deeply involved in the emotional center of the brain; 
+     it regulates mood, emotional responses, motivation, and memory formation.
+     '''
 
-     # Responsible for  Deeply involved in the emotional center of the brain; it regulates mood, emotional responses, motivation, and memory formation.
-     def __init__(self, appOutput: dict, apiKey: str):
-          self.client = Groq(api_key=apiKey)
-          self.sensor = sensoryOutput()
-          self.emotion = quantumEmotion()
-          self.emotionDict = {
+     cen_class = network_builder("CEN")
+     cen = cen_class()
+     client: str
+     sensor: SensoryOutput
+     emotion: QuantumEmotion
+     emotion_dict: dict 
+
+     def __init__(self, app_output: dict, api_key: str):
+          self.client = Groq(api_key=api_key)
+          self.sensor = SensoryOutput()
+          self.emotion = QuantumEmotion()
+          self.emotion_dict = {
           "Happy": 0,
           "Sad": 0,
           "Disgust": 0,
@@ -95,61 +89,55 @@ class LIMNetwork:
           "Anger": 0,
           "Surprise": 0,
           }
-          self.thalamus(appOutput)
+          self.thalamus(app_output)
 
-     # The Thalamo-Amygdala Pathway
-     def thalamus(self, sensoryData: dict):
+     def thalamus(self, sensory_data: dict):
 
           def check_attention(saved_state_vector, last_timestamp, decay_rate):
-               attentionDecay = CEN.attentionCheck(saved_state_vector, timestamp, decay_rate)
-               if (attentionDecay):
-                    return attentionDecay
+               attention_decay = cen.attention_check(saved_state_vector, timestamp, decay_rate)
+               if (attention_decay):
+                    return attention_decay
                else:
                     return False
 
-          # Emotional stimulus processing
-          for timestamp, sensorData in sensoryData.items:
-               match type(sensorData).__name__:
-                    # might need to scale, could we handle tons of data, or for MVP, this one would do?
-                    
+          for timestamp, sensor_data in sensory_data.items:
+               match type(sensor_data).__name__:
+
                     # ASYNCIO FOR DATA FLOW, NETWORKING, AND COMMUNICATION
                     # MULTIPROCESSING MODULE FOR MATRIX, MATH, AND OPTMIZE, ANYTHING IN NUMPY, NN
 
                     case "str":
-                         sensoryOutput.Text = sensorData
-                         self.amygdala(sensoryOutput.Text)
-                         attentionGate = check_attention(self.emotion.state_vector, timestamp, 2.0) #test self.decayrate
-                         asyncio.create_task(CEN.push_attention(attentionGate, sensorData))
+                         self.sensor.Text = sensory_data
+                         self.amygdala(self.sensor.Text)
+                         attentionGate = check_attention(self.emotion.state_vector, timestamp, 2.0) # test self.decayrate
+                         asyncio.create_task(self.cen.push_attention(attentionGate, sensor_data))
                     case "bytearray":
                          # sensoryOutput is a class because the brain will also check it, be used in other areas
-                         sensoryOutput.Audio = sensorData
-                         self.amygdala(sensoryOutput.Audio) 
-                         attentionGate = check_attention(self.emotion.state_vector, timestamp, 3.0)#test self.decayrate
-                         asyncio.create_task(CEN.push_attention(attentionGate, sensorData))
+                         self.sensor.Audio = sensor_data
+                         self.amygdala(self.sensor.Audio) 
+                         attentionGate = check_attention(self.emotion.state_vector, timestamp, 3.0) # test self.decayrate
+                         asyncio.create_task(self.cen.push_attention(attentionGate, sensor_data))
                     case "ndarray":
-                         sensoryOutput.Video = sensorData
-                         self.amygdala(sensoryOutput.Video)
-                         attentionGate = check_attention(self.emotion.state_vector, timestamp, 4.0)#test self.decayrate
-                         asyncio.create_task(CEN.push_attention(attentionGate, sensorData))
+                         self.sensor.Video = sensor_data
+                         self.amygdala(self.sensor.Video)
+                         attentionGate = check_attention(self.emotion.state_vector, timestamp, 4.0) # test self.decayrate
+                         asyncio.create_task(self.cen.push_attention(attentionGate, sensor_data))
                     
-     async def amygdala(self, emotionalStimulus: any):
+     async def amygdala(self, emotional_stimulus: any):
           amygdala_work = set()
 
-          # Stimulated brain
-          get_vad = self.extract_affective_state(emotionalStimulus)
+          get_vad = self.extract_affective_state(emotional_stimulus)
           map_result = self.emotion.map_vad_to_angles(get_vad)
           compute_emotion = self.emotion.compute_emotion_state(map_result)
 
-          # Emotional transition from current sensory data
-          # Check if sensory data are not empty
           if (self.sensor.Text != '' or self.sensor.Audio != bytearray() or self.sensor.Video != bytearray()):
-               # Yet, emotional state is not intense
+
                if (self.emotion.emotional_state <= 0):
                     transition_the_emotion = asyncio.create_task(
                          self.emotion.compute_emotion_transition(self.emotion.affective_state)
                     )
                     amygdala_work.add(transition_the_emotion)
-               # Emotional state is high, will transition to calm
+
                elif (self.emotion.emotional_state >= 0 and self.emotion.affective_state['Valence'] >= 0 and
                      self.emotion.affective_state['Arousal'] <= 0):
                     transition_the_emotion = asyncio.create_task(
@@ -157,14 +145,8 @@ class LIMNetwork:
                     )
                     amygdala_work.add(transition_the_emotion)
 
-          # Memory formation
-          # Runs in background
-          # If working memory and current emotion are linked
-          # through high stimulus
-          # It becomes long-term memory
-          # will refactor soon
           check_stimulus_states = self.emotion.stimulus_states
-          form_long_term_memories = asyncio.create_task([CEN.get_working_memory() ** stimulus for stimulus, state in
+          form_long_term_memories = asyncio.create_task([self.cen.get_working_memory() ** stimulus for stimulus, state in
           check_stimulus_states.items() if state > self.emotional_state])
           amygdala_work.add(form_long_term_memories)
           pass
@@ -176,12 +158,12 @@ class LIMNetwork:
           Format exactly like this: {"valence": float, "arousal": float, "dominance": float}
           Values must be between -1.0 and 1.0.
           """
-     
+
           response = self.client.chat.completions.create(
                model="llama-3.1-8b-instant",
                messages=[
                     {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_text}
+                    {"role": "user", "content": app_output['user_data']}
                ],
                response_format={"type": "json_object"}, 
                temperature=0.1 
@@ -192,5 +174,3 @@ class LIMNetwork:
           
           return e_stimulus
 
-
-          # Since there are 100feeelings, itsmost likely 

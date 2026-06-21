@@ -6,8 +6,8 @@ from sen import SENNetwork
 from ven import VENNetwork
 from vis import VISNetwork
 
-def network_builder(networkChoice):
-    networkModules = {
+def network_builder(network_choice: str):
+    network_modules = {
         "CEN": CENetwork,
         "DFM": DFMNetwork,
         "LIM": LIMNetwork,
@@ -17,8 +17,8 @@ def network_builder(networkChoice):
         "VIS": VISNetwork
     }
     
-    if networkChoice not in networkModules:
-        raise ValueError(f"Network module '{networkChoice}' does not exist.")
+    if network_choice not in network_modules:
+        raise ValueError(f"Network module '{network_choice}' does not exist.")
         
-    return networkModules[networkChoice]
+    return network_modules[network_choice]
 
