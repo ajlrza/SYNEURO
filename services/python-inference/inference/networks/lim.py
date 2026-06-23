@@ -94,7 +94,7 @@ class LIMNetwork:
      def thalamus(self, sensory_data: dict):
 
           def check_attention(saved_state_vector, last_timestamp, decay_rate):
-               attention_decay = cen.attention_check(saved_state_vector, timestamp, decay_rate)
+               attention_decay = self.cen.attention_check(saved_state_vector, timestamp, decay_rate)
                if (attention_decay):
                     return attention_decay
                else:

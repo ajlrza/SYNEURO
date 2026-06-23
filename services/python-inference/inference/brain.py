@@ -2,40 +2,43 @@ import os
 import json
 import subprocess
 from networks.network_imports import network_builder
-from openai import OpenAI
 from groq import Groq
-from dotenv import load_dotenv
+
          
 class Brain:
      # Configure the brain
-     DFMBuild = network_builder("DFM")
-     CENBuild = network_builder("CEN")
-     SALBuild = network_builder("SAL")
-     SENBuild = network_builder("SEN")
-     VISBuild = network_builder("VIS")
-     LIMBuild = network_builder("LIM")
-     VENBuild = network_builder("VEN")
-
-     DFM = DFMBuild()
-     CEN = CENBuild()
-     SAL = SALBuild()
-     SEN = SENBuild()
-     VIS = VISBuild()
-     LIM = LIMBuild()
-     VEN = VENBuild()
+     active_modules: dict
 
      app_output = {}
 
      def __init__(self, app_output: object):
          self.app_output = app_output
+         self.active_modules = {}
 
-async def syneuro_inference(app_output: object, api_key: str):
+     def activate_brain_module(self, brain_module: str):
+         if brain_module in self.active_modules:
+            return f'{brain_module} is already active.'
+         
+         self.active_modules[brain_module] = network_builder(brain_module)()
+        
+def syneuro_conscious_state(app_output: object, api_key: str):
     brain_management = Brain(app_output)
 
-    tracked_attention = brain_management.track_attention()
-    init_emotion = brain_management.LIM(brain_management.app_output, api_key)
-    process_emotion_stimulus = brain_management.LIM.amygdala()
-    
+    if (len(app_output.request_activation) >= 1):
+        for brain_module in app_output.request_activation:
+            brain_management.activate_brain_module(brain_module)
+
+    if (app_output.sensor_data >= 1 and brain_management.active_modules.keys >= 1):
+        # Assume CEN and LIM are always activated or thismight berisky?
+        cen_work = brain_management.active_modules['CEN']
+        lim_work = brain_management.active_modules['LIM']
+        try:
+            cen_active = cen_work(app_output)
+        except ValueError as E:
+            return E
+        lim_emotion = lim_work(app_output)
+    # There's no need for database ID in this, as it is not an application but a middleware.
+
 
 
         
