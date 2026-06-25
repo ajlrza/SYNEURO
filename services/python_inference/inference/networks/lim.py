@@ -100,7 +100,7 @@ class LIMNetwork:
                else:
                     return False
 
-          for timestamp, sensor_data in sensory_data.items:
+          for timestamp, sensor_data in sensory_data.sensory:
                match type(sensor_data).__name__:
 
                     # ASYNCIO FOR DATA FLOW, NETWORKING, AND COMMUNICATION

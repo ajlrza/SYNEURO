@@ -37,6 +37,12 @@ def syneuro_conscious_state(app_output: object, api_key: str):
         except ValueError as E:
             return E
         lim_emotion = lim_work(app_output)
+
+        return lim_emotion
+
+    else:
+        return "Syneuro does not process any sensor_data and active brain modules at the moment."
+    
     # There's no need for database ID in this, as it is not an application but a middleware.
 
 
