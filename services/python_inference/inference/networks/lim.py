@@ -158,7 +158,8 @@ class LIMNetwork:
           form_long_term_memories = asyncio.create_task([self.cen.get_working_memory() ** stimulus for stimulus, state in
           check_stimulus_states.items() if state > self.emotional_state])
           amygdala_work.add(form_long_term_memories)
-          pass
+          
+          return self.emotion.state
                     
      def extract_affective_state(self, app_output: dict) -> np.ndarray:
    
