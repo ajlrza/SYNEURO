@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from . import brain
+from .python_inference.inference import brain
 import json
 
 # Server 

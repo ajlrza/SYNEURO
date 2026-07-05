@@ -1,9 +1,11 @@
 import os
+import sys
+    
 import json
 import time
+from datetime import datetime
 import asyncio
 import numpy as np
-from network_imports import network_builder 
 from groq import Groq
 from enum import Enum
 
@@ -69,18 +71,23 @@ class LIMNetwork:
      Responsible for  Deeply involved in the emotional center of the brain; 
      it regulates mood, emotional responses, motivation, and memory formation.
      '''
-
-     cen_class = network_builder("CEN")
-     cen = cen_class()
      client: str
      sensor: SensoryOutput
      emotion: QuantumEmotion
      emotion_dict: dict 
+     cen: any
 
      def __init__(self, app_output: dict, api_key: str):
+
+          from .network_imports import network_builder # Deferred import
+
           self.client = Groq(api_key=api_key)
           self.sensor = SensoryOutput()
           self.emotion = QuantumEmotion()
+
+          cen_class = network_builder("CEN")
+          self.cen = cen_class(agent_output=app_output)
+
           self.emotion_dict = {
           "Happy": 0,
           "Sad": 0,
@@ -89,18 +96,20 @@ class LIMNetwork:
           "Anger": 0,
           "Surprise": 0,
           }
+
           self.thalamus(app_output)
 
      def thalamus(self, sensory_data: dict):
 
           def check_attention(saved_state_vector, last_timestamp, decay_rate):
+               from .network_imports import network_builder
                attention_decay = self.cen.attention_check(saved_state_vector, timestamp, decay_rate)
                if (attention_decay):
                     return attention_decay
                else:
                     return False
 
-          for timestamp, sensor_data in sensory_data.sensory:
+          for timestamp, sensor_data in sensory_data.items():
                match type(sensor_data).__name__:
 
                     # ASYNCIO FOR DATA FLOW, NETWORKING, AND COMMUNICATION

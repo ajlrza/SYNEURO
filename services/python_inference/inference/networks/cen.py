@@ -1,4 +1,6 @@
-from network_imports import networkBuilder
+import os
+import sys
+
 import time
 import numpy as np
 
@@ -29,9 +31,9 @@ class CENNetwork:
 
     def __init__(self, agent_output: object):
  
-        if len(agent_output.modalities) >= 2:
+        if len(agent_output['modalities']) >= 2:
             
-            if self.__filter_modalities(agent_output.modalities):
+            if self.__filter_modalities(agent_output['modalities']):
                 self.agent_output = agent_output
             else:
                 raise ValueError("Modality not accepted. Only accepts Text, Audio, Video, Image, or VideoSensor.")

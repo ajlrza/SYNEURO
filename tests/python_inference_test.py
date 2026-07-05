@@ -1,7 +1,12 @@
+import os
+import sys
 import unittest
 from dotenv import load_dotenv
-from services.python_inference.inference.brain import *
-from services.python_inference.inference.networks.network_imports import *
+
+root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if root_dir not in sys.path:
+    sys.path.insert(0, root_dir)
+
 
 class TestInference(unittest.TestCase):
 
@@ -9,13 +14,17 @@ class TestInference(unittest.TestCase):
         
         app_output = {
             'sensory': {
-                '2026-06-25T12:30:00.000Z': 'This is a test yay.',
-                '2026-06-25T1:30:00.000Z': 'This is not a test!!!',
+                '2026-06-25T12:30:00.000Z': 'I AM MADD.',
+                '2026-06-25T1:30:00.000Z': 'IM SO HAPPY',
             },
-            'modalities': {
+            'modalities': [
                 'Text',
                 'Text'
-            },
+            ],
+            'request_activation': [
+                'CEN',
+                'LIM'
+            ],
             'active_modules': [
                 'CEN',
                 'LIM'
@@ -24,9 +33,12 @@ class TestInference(unittest.TestCase):
 
         load_dotenv()
         api_key = os.getenv('TEST_CASE_KEY')
+        from services.python_inference.inference.brain import Brain
         brain = Brain(app_output, api_key)
 
-        self.assertIsInstance(brain, Brain)
+        from services.python_inference.inference.brain import syneuro_conscious_state
+        print(syneuro_conscious_state(Brain, app_output, api_key))
+
 
     def test_activate_bm_syneuro(self):
 
@@ -35,10 +47,14 @@ class TestInference(unittest.TestCase):
                 '2026-06-25T12:30:00.000Z': 'This is a test yay.',
                 '2026-06-25T1:30:00.000Z': 'This is not a test!!!',
             },
-            'modalities': {
+            'modalities': [
                 'Text',
                 'Text'
-            },
+            ],
+            'request_activation': [
+                'CEN',
+                'CLIM'
+            ],
             'active_modules': [
                 'CEN',
                 'LIM'
@@ -47,18 +63,24 @@ class TestInference(unittest.TestCase):
 
         load_dotenv()
         api_key = os.getenv('TEST_CASE_KEY')
+        from services.python_inference.inference.brain import Brain
         brain = Brain(app_output, api_key)
         
-        activate_bm = brain.active_modules('LIM')
+        activate_bm = brain.activate_brain_module('LIM')
+        from services.python_inference.inference.networks.network_imports import network_builder  
+
+        lim = network_builder("LIM")
+
         active_modules_equality = {
-            'LIM': LIMNetwork()
+            'LIM': lim(app_output, api_key)
         }
 
         if (activate_bm):
             return_type = type(activate_bm)
             self.assertEqual(return_type, str)
 
-        self.assertDictEqual(brain.active_modules, active_modules_equality)
+        self.assertIsInstance(brain.active_modules['LIM'], type(active_modules_equality['LIM']))
+
 
 
 

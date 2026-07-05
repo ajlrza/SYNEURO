@@ -1,11 +1,28 @@
-from network_imports import network_builder 
-import RAG
+import os
+import sys
 
+class RAG:
+    current_context: list
+    working_memory = {}
+
+
+    def context_rag(self, environmental_data: list):
+        self.current_context = environmental_data
+        
+    def working_memory(self):
+        return len(self.working_memory)
+    
+    def add_temp_memory(self, attention):
+        self.working_memory['temp'] = attention
+        
+    def add_memory(self, attention):
+        self.working_memory['attention'] = attention
 
 class SALNetwork:
+     from .network_imports import network_builder 
      cen_class = network_builder("CEN")
-     cen = cen_class()
-     RAG: RAG.instance
+     cen: any
+     RAG: RAG
      environmental_data = []
      attention_list = []
      current_attention = {}
@@ -29,13 +46,13 @@ class SALNetwork:
                self.current_attention[attention_count] = attention
                
           while (True):
-               if (self.RAG.working_memory() <= 100):
+               if (self.RAG.working_memory() < 100):
                   self.RAG.add_memory(self.attention_list[task_count - 1])
-               elif (cen.check_attention == False):
+               elif (self.cen.check_attention == False):
                    continue
                else:
                # Note: Attention is the data from user, should SLM be involved here hm
-                  if (self.RAG.working_memory() != "Full"): 
+                  if (self.RAG.working_memory() != 100): 
                      self.RAG.add_memory(self.attention_list[task_count])
                      self.attention_list.pop(task_count)
                      task_count += 1
@@ -46,7 +63,7 @@ class SALNetwork:
                
      async def store_attention(self, attentionList: list, taskCount):
           attentionList = attentionList
-          await add_attention = self.cen.push_attention(self.attentionList, taskCount)
+          add_attention = await self.cen.push_attention(self.attentionList, taskCount)
           return add_attention
      
                
