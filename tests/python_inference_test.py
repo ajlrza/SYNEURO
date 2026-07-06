@@ -37,7 +37,7 @@ class TestInference(unittest.TestCase):
         brain = Brain(app_output, api_key)
 
         from services.python_inference.inference.brain import syneuro_conscious_state
-        print(syneuro_conscious_state(Brain, app_output, api_key))
+        syneuro_conscious_state(Brain, app_output, api_key)
 
 
     def test_activate_bm_syneuro(self):

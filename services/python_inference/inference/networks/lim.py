@@ -41,9 +41,7 @@ class QuantumEmotion:
      bloch_vector = np.array(
           [(0.0, 0.0, 0.0)], dtype=bloch_dt
      )
-
      state_vector: np.array
-     bloch_vector: np.array = ([[[]]])
 
      def __init__(self):
         self.state_vector = np.array([[1.0 + 0.j], [0.0 + 0.j]], dtype=np.complex128)
@@ -93,7 +91,7 @@ class LIMNetwork:
      client: str
      sensor: SensoryOutput
      emotion: QuantumEmotion
-     emotion_dict: dict 
+     emotion_matrix: dict 
      cen: any
 
      def __init__(self, app_output: dict, api_key: str):
@@ -107,16 +105,56 @@ class LIMNetwork:
           cen_class = network_builder("CEN")
           self.cen = cen_class(agent_output=app_output)
 
-          self.emotion_dict = {
-          "Happy": 0,
-          "Sad": 0,
-          "Disgust": 0,
-          "Fear": 0,
-          "Anger": 0,
-          "Surprise": 0,
+          self.emotion_matrix = {
+               "x": {
+                    "positive": {"name": "Surprise", "value": 0.0, "min": 0.0, "max": 1.0},
+                    "negative": {"name": "Fear", "value": 0.0, "min": 0.0, "max": 1.0}
+               },
+               "y": {
+                    "positive": {"name": "Zeal", "value": 0.0, "min": 0.0, "max": 1.0}, 
+                    "negative": {"name": "Calm", "value": 0.0, "min": 0.0, "max": 1.0}, 
+                    "mixed_negative": {"name": "Angry", "value": 0.0, "min": 0.0, "max": 1.0} 
+               },
+               "z": {
+                    "positive": {"name": "Happy", "value": 0.0, "min": 0.0, "max": 1.0},
+                    "moderate_negative": {"name": "Sad", "value": 0.0, "min": 0.0, "max": 1.0},
+                    "extreme_negative": {"name": "Depressed", "value": 0.0, "min": 0.0, "max": 1.0}
+               }
           }
 
-          self.thalamus(app_output)
+          self.amygdala(app_output)
+
+     def update_emotion_matrix(self):
+        x_val = self.emotion.bloch_vector['x'][0]
+        y_val = self.emotion.bloch_vector['y'][0]
+        z_val = self.emotion.bloch_vector['z'][0]
+
+        if x_val > 0 and x_val < 1:
+             self.emotion_matrix["x"]["positive"]["value"] = float(x_val)
+             self.emotion_matrix["x"]["negative"]["value"] = 0.0
+        else:
+             self.emotion_matrix["x"]["negative"]["value"] = float(x_val)
+             self.emotion_matrix["x"]["positive"]["value"] = 0.0
+
+        if y_val > 0 and y_val < 1:
+             self.emotion_matrix["y"]["positive"]["value"] = float(y_val)
+             self.emotion_matrix["y"]["negative"]["value"] = 0.0
+        else:
+            self.emotion_matrix["y"]["positive"]["value"] = 0.0
+            self.emotion_matrix["y"]["negative"]["value"] = float(y_val) if y_val > -0.5 else 0.0
+            self.emotion_matrix["y"]["mixed_negative"]["value"] = float(y_val) if y_val <= -0.5 else 0.0
+
+        if z_val > 0 and y_val < 1:
+            self.emotion_matrix["z"]["positive"]["value"] = float(z_val)
+            self.emotion_matrix["z"]["moderate_negative"]["value"] = 0.0
+            self.emotion_matrix["z"]["extreme_negative"]["value"] = 0.0
+        else:
+            self.emotion_matrix["z"]["positive"]["value"] = 0.0
+            self.emotion_matrix["z"]["moderate_negative"]["value"] = float(z_val) if z_val > -0.6 else 0.0
+            self.emotion_matrix["z"]["extreme_negative"]["value"] = float(z_val) if z_val <= -0.6 else 0.0
+
+        return self.emotion_matrix
+
 
      def thalamus(self, sensory_data: dict):
 
@@ -150,8 +188,9 @@ class LIMNetwork:
                          self.amygdala(self.sensor.Video)
                          attentionGate = check_attention(self.emotion.state_vector, timestamp, 4.0) # test self.decayrate
                          asyncio.create_task(self.cen.push_attention(attentionGate, sensor_data))
+
                     
-     async def amygdala(self, app_output: object):
+     def amygdala(self, app_output: object):
           amygdala_work = set()
 
           get_vad = self.extract_affective_state(app_output)
@@ -173,12 +212,16 @@ class LIMNetwork:
                     amygdala_work.add(transition_the_emotion)
 
           check_stimulus_states = self.emotion.stimulus_states
+
           form_long_term_memories = asyncio.create_task([self.cen.get_working_memory() ** stimulus for stimulus, state in
           check_stimulus_states.items() if state > self.emotional_state])
-          amygdala_work.add(form_long_term_memories)
-          
-          return compute_emotion
+
+          bloch_vector = self.emotion.bloch_vector[0]
+
+          if (bloch_vector['x'] + bloch_vector['y'] + bloch_vector['z']) != 0:
+               self.update_emotion_matrix()
                     
+          return self.emotion_matrix
      def extract_affective_state(self, app_output: dict) -> np.ndarray:
    
           system_prompt = """
@@ -191,7 +234,7 @@ class LIMNetwork:
                model="llama-3.1-8b-instant",
                messages=[
                     {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": app_output['user_data']}
+                    {"role": "user", "content": app_output['sensory']}
                ],
                response_format={"type": "json_object"}, 
                temperature=0.1 

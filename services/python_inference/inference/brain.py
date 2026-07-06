@@ -41,9 +41,8 @@ def syneuro_conscious_state(brain: Brain, app_output: object, api_key: str):
         cen_work = brain_management.active_modules['CEN']
         lim_work = brain_management.active_modules['LIM']
         cen_active = cen_work(app_output)
-        lim_emotion = lim_work(app_output, api_key)
-        return vars(lim_emotion)
-
+        lim = lim_work(app_output, api_key)
+        print(lim.emotion_matrix)
     else:
         return ("Syneuro does not process any sensor_data and active brain modules at the moment.")
     
