@@ -33,29 +33,48 @@ def get_emotional_state(valence: float, arousal: float) -> tuple[np.complex128, 
 class QuantumEmotion:
      emotional_state: float
      affective_state: np.ndarray
-     stimulus_states: dict
+     stimulus_states: np.ndarray
+
+     bloch_dt = np.dtype(
+          [('x', 'f4'), ('y', 'f4'), ('z', 'f4')]
+     )
+     bloch_vector = np.array(
+          [(0.0, 0.0, 0.0)], dtype=bloch_dt
+     )
+
      state_vector: np.array
      bloch_vector: np.array = ([[[]]])
 
      def __init__(self):
         self.state_vector = np.array([[1.0 + 0.j], [0.0 + 0.j]], dtype=np.complex128)
 
-     def map_vad_to_angles(self, valence, arousal):
+     def map_vad_to_angles(self, stimulus: np.array):
+        valence, arousal, dominance = stimulus
+
         theta = np.interp(valence, [-1, 1], [np.pi, 0])
         phi = np.interp(arousal, [-1, 1], [0, 2 * np.pi])
-        return theta, phi
+        r = np.interp(dominance, [-1, 1], [0, 1])
+
+        x = r * np.sin(theta) * np.cos(phi)
+        y = r * np.sin(theta) * np.sin(phi)
+        z = r * np.cos(theta)
+
+        self.bloch_vector['x'] = x
+        self.bloch_vector['y'] = y
+        self.bloch_vector['z'] = z
+
+        return self.bloch_vector
      
-     def compute_emotion_state(self, valence, arousal, dominance):
-        theta, phi = self.map_vad_to_angles(valence, arousal)
+     def compute_emotion_state(self, theta: float, phi: float, r: float):
         
         amp_0 = np.cos(theta / 2)
         amp_1 = np.exp(1j * phi) * np.sin(theta / 2)
         
-        self.state_vector = dominance * np.array([[amp_0], [amp_1]], dtype=np.complex128)
+        self.state_vector = r * np.array([[amp_0], [amp_1]], dtype=np.complex128)
         return self.state_vector
      
-     def compute_emotion_transition(self, stimulus_vad):
-        theta, phi = self.map_vad_to_angles(stimulus_vad['valence'], stimulus_vad['arousal'])
+     def compute_emotion_transition(self, stimulus_vad: np.array):
+        theta, phi, r = self.map_vad_to_angles(stimulus_vad['valence'], stimulus_vad['arousal'], stimulus_vad['dominance'])
         
         U = np.array([
             [np.cos(theta/2), -np.exp(-1j*phi) * np.sin(theta/2)],
@@ -132,12 +151,11 @@ class LIMNetwork:
                          attentionGate = check_attention(self.emotion.state_vector, timestamp, 4.0) # test self.decayrate
                          asyncio.create_task(self.cen.push_attention(attentionGate, sensor_data))
                     
-     async def amygdala(self, emotional_stimulus: any):
+     async def amygdala(self, app_output: object):
           amygdala_work = set()
 
-          get_vad = self.extract_affective_state(emotional_stimulus)
-          map_result = self.emotion.map_vad_to_angles(get_vad)
-          compute_emotion = self.emotion.compute_emotion_state(map_result)
+          get_vad = self.extract_affective_state(app_output)
+          compute_emotion = self.emotion.map_vad_to_angles(get_vad)
 
           if (self.sensor.Text != '' or self.sensor.Audio != bytearray() or self.sensor.Video != bytearray()):
 
@@ -159,7 +177,7 @@ class LIMNetwork:
           check_stimulus_states.items() if state > self.emotional_state])
           amygdala_work.add(form_long_term_memories)
           
-          return self.emotion.state
+          return compute_emotion
                     
      def extract_affective_state(self, app_output: dict) -> np.ndarray:
    
@@ -180,7 +198,7 @@ class LIMNetwork:
           )
           
           payload = json.loads(response.choices[0].message.content)
-          e_stimulus = np.array([payload["valence"], payload["arousal"], payload["dominance"]])
+          stimulus = np.array([payload["valence"], payload["arousal"], payload["dominance"]])
           
-          return e_stimulus
+          return stimulus
 
