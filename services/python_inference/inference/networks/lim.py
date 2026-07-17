@@ -10,9 +10,9 @@ from groq import Groq
 from enum import Enum
 
 class SensoryOutput:
-     Text: str = ""
-     Audio: bytearray
-     Video: bytearray # or ndarray? bytearray is temp
+     Text: str = None
+     Audio: bytearray = None
+     Video: bytearray = None
      pass
 
 def get_emotional_state(valence: float, arousal: float) -> tuple[np.complex128, np.complex128]:
@@ -31,9 +31,9 @@ def get_emotional_state(valence: float, arousal: float) -> tuple[np.complex128, 
     return amp_0, amp_1
 
 class QuantumEmotion:
-     emotional_state: float
-     affective_state: np.ndarray
-     stimulus_states: np.ndarray
+     emotional_state: float = 0.0
+     affective_state: np.ndarray = np.array([0.0, 0.0, 0.0])
+     stimulus_states: np.ndarray = np.array([0.0, 0.0, 0.0]) 
 
      bloch_dt = np.dtype(
           [('x', 'f4'), ('y', 'f4'), ('z', 'f4')]
@@ -41,12 +41,12 @@ class QuantumEmotion:
      bloch_vector = np.array(
           [(0.0, 0.0, 0.0)], dtype=bloch_dt
      )
-     state_vector: np.array
+     state_vector: np.ndarray
 
      def __init__(self):
         self.state_vector = np.array([[1.0 + 0.j], [0.0 + 0.j]], dtype=np.complex128)
 
-     def map_vad_to_angles(self, stimulus: np.array):
+     def map_vad_to_angles(self, stimulus: np.ndarray):
         valence, arousal, dominance = stimulus
 
         theta = np.interp(valence, [-1, 1], [np.pi, 0])
@@ -61,7 +61,7 @@ class QuantumEmotion:
         self.bloch_vector['y'] = y
         self.bloch_vector['z'] = z
 
-        return self.bloch_vector
+        return self.bloch_vector['x'], self.bloch_vector['y'], self.bloch_vector['z']
      
      def compute_emotion_state(self, theta: float, phi: float, r: float):
         
@@ -71,8 +71,8 @@ class QuantumEmotion:
         self.state_vector = r * np.array([[amp_0], [amp_1]], dtype=np.complex128)
         return self.state_vector
      
-     def compute_emotion_transition(self, stimulus_vad: np.array):
-        theta, phi, r = self.map_vad_to_angles(stimulus_vad['valence'], stimulus_vad['arousal'], stimulus_vad['dominance'])
+     def compute_emotion_transition(self, stimulus_vad: np.ndarray):
+        theta, phi, r = self.map_vad_to_angles(stimulus_vad)
         
         U = np.array([
             [np.cos(theta/2), -np.exp(-1j*phi) * np.sin(theta/2)],
@@ -195,17 +195,18 @@ class LIMNetwork:
 
           get_vad = self.extract_affective_state(app_output)
           compute_emotion = self.emotion.map_vad_to_angles(get_vad)
+          print(compute_emotion)
 
-          if (self.sensor.Text != '' or self.sensor.Audio != bytearray() or self.sensor.Video != bytearray()):
+          if (self.sensor.Text == None or self.sensor.Audio == None or self.sensor.Video == None):
 
-               if (self.emotion.emotional_state <= 0):
+               if (self.emotion.emotional_state <= 0 and (self.emotion.affective_state != 0.0).all()):
                     transition_the_emotion = asyncio.create_task(
                          self.emotion.compute_emotion_transition(self.emotion.affective_state)
                     )
                     amygdala_work.add(transition_the_emotion)
 
-               elif (self.emotion.emotional_state >= 0 and self.emotion.affective_state['Valence'] >= 0 and
-                     self.emotion.affective_state['Arousal'] <= 0):
+               elif (self.emotion.emotional_state >= 0.0 and self.emotion.affective_state[0] != 0.0 and
+                     self.emotion.affective_state[1] != 0.0):
                     transition_the_emotion = asyncio.create_task(
                          self.emotion.compute_emotion_transition(self.emotion.affective_state)
                     )
@@ -234,7 +235,7 @@ class LIMNetwork:
                model="llama-3.1-8b-instant",
                messages=[
                     {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": app_output['sensory']}
+                    {"role": "user", "content": "This is a test content, but I am angry"}
                ],
                response_format={"type": "json_object"}, 
                temperature=0.1 
