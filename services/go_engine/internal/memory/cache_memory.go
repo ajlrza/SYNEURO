@@ -12,7 +12,7 @@ type CacheMemory struct {
 	AiAction   interface{}
 }
 
-func cache_builder(cache_name string, cache []string) CacheMemory {
+func cache_builder(cache []string) CacheMemory {
 	var tmp_cache []interface{} 
 	var cache_construct CacheMemory
 
