@@ -34,6 +34,7 @@ class QuantumEmotion:
      emotional_state: float = 0.0
      affective_state: np.ndarray = np.array([0.0, 0.0, 0.0])
      stimulus_states: np.ndarray = np.array([0.0, 0.0, 0.0]) 
+     stimulus_dict: dict = {}
 
      bloch_dt = np.dtype(
           [('x', 'f4'), ('y', 'f4'), ('z', 'f4')]
@@ -213,9 +214,11 @@ class LIMNetwork:
                     amygdala_work.add(transition_the_emotion)
 
           check_stimulus_states = self.emotion.stimulus_states
+          stimulus_labels = ["Valence", "Arousal", "Dominance"]
+          stimulus_dict = {stimulus_labels[i]: val for i, val in enumerate(check_stimulus_states)}
 
           form_long_term_memories = asyncio.create_task([self.cen.get_working_memory() ** stimulus for stimulus, state in
-          check_stimulus_states.items() if state > self.emotional_state])
+          stimulus_dict.items() if state > self.emotion.emotional_state])
 
           bloch_vector = self.emotion.bloch_vector[0]
 

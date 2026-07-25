@@ -3,9 +3,8 @@ package main
 import (
      "fmt"
      "log"
-     "strings"
-     "encoding/json" 
      "github.com/gofiber/fiber/v3"
+     "net/url"
      //"net/http"
 )
 
@@ -29,8 +28,6 @@ func main() {
 
     })
 
-     var memory_cache any
-
      app.Post("/cache-memory", func(c fiber.Ctx) error {
 
         if !c.HasBody() {
@@ -39,11 +36,12 @@ func main() {
      
         body := c.Body()
         u, err := url.Parse(c.FullURL())
-        userId := ""
 
-        if err == nil {
-            userId = u.Query().Get("userid") 
+        if err != nil {
+            return c.SendStatus(fiber.StatusBadRequest) 
         }
+
+        userId := u.Query().Get("userid") 
 
         if userId == "" {
             fmt.Println("User not found in the request... attemping to ask the client.")
