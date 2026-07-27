@@ -11,26 +11,29 @@ quantum association for comlexity.
 A middleware is also used that acts as the "transport" layer for the agent's brain
 passing down the memories all the way to the Neo4j Graph DB for human-like long-term memory.
 
-
+```text
 ┌───────────────────────────────── SYSTEM RAM / GPU VRAM ─────────────────────────────────┐
 │                                                                                         │
-│  ┌───────────────────────────────┐               ┌───────────────────────────────┐      │
-│  │   HALF HILBERT CACHE (Cⁿ)     │ ◄───────────► │   HALF NORMAL CACHE (Rⁿ)      │      │
-│  │  • Continuous wave function   │  Interference │  • Discrete token IDs / text  │      │
-│  │  • Complex numbers & phases   │   & Mapping   │  • Static vector embeddings   │      │
-│  │  • Quantum Emotions / Flow    │               │  • Recent raw chat history    │      │
-│  └───────────────┬───────────────┘               └───────────────┬───────────────┘      │
-└──────────────────┼───────────────────────────────────────────────┼──────────────────────┘
-                   │                                               │
-                   ▼                                               ▼
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                              APPLICATION MIDDLEWARE                                     │
-│    • Handles the measurement (collapse) of the Hilbert space into discrete states.      │
-│    • Pairs the collapsed quantum state values with the raw text/normal embeddings.      │
-└──────────────────────────────────────────┬──────────────────────────────────────────────┘
-                                           ▼
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                                   NEO4J GRAPH DB                                        │
-│          • Nodes: Persistent text entities, normal embeddings, and anchors.             │
-│          • Edges: Entanglement strengths, phase relationships, and causal links.        │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
+│     ┌───────────────────────────────┐                 ┌───────────────────────────────┐ │
+│     │ HALF HILBERT CACHE (Cⁿ)       │                 │ HALF NORMAL CACHE (Rⁿ)        │ │
+│     │ • Continuous wave function    │  Interference   │ • Discrete token IDs / text   │ │
+│     │ • Complex numbers & phases    │  ───────────►   │ • Static vector embeddings    │ │
+│     │ • Quantum Emotions / Flow     │   & Mapping     │ • Recent raw chat history     │ │
+│     └───────────────┬───────────────┘                 └───────────────┬───────────────┘ │
+│                     │                                                 │                 │
+└─────────────────────┼─────────────────────────────────────────────────┼─────────────────┘
+                      │                                                 │
+                      ▼                                                 ▼
+      ┌─────────────────────────────────────────────────────────────────────────────────┐
+      │ APPLICATION MIDDLEWARE                                                          │
+      │ • Handles the measurement (collapse) of the Hilbert space into discrete states. │
+      │ • Pairs the collapsed quantum state values with the raw text/normal embeddings. │
+      └───────────────────────────────────┬─────────────────────────────────────────────┘
+                                          │
+                                          ▼
+      ┌─────────────────────────────────────────────────────────────────────────────────┐
+      │ NEO4J GRAPH DB                                                                  │
+      │ • Nodes: Persistent text entities, normal embeddings, and anchors.              │
+      │ • Edges: Entanglement strengths, phase relationships, and causal links.         │
+      └─────────────────────────────────────────────────────────────────────────────────┘
+```
