@@ -28,34 +28,3 @@ At the core of the Python inference pipeline is the `agentBrain`, which orchestr
 * **`SENNetwork` (Sensorimotor):** Manages outbound communication processing, formatting text, speech syntax, and physical hardware commands.
 * **`VISNetwork` (Visual):** Dedicated to processing visual inputs, computer vision arrays, and spatial awareness feeds.
 * **`VENNetwork` (Ventral Attention):** The interrupt handler. Manages sudden environmental shifts, unexpected attention grabs, and introduces necessary behavioral randomness.
-
-## Systems Infrastructure
-
-* **Custom IPC Bridge:** A slot-based Inter-Process Communication mechanism bypassing HTTP/gRPC overhead, routing telemetry across Go, Python, and TypeScript with ultra-low latency.
-* **Swappable Event Broker (Asyncio / Kafka):** Built on the Strategy Pattern, the messaging layer is environment-configurable. It utilizes Python's native `asyncio.Queue` and Go channels for ultra-low latency, zero-overhead local MVP deployments, and seamlessly hot-swaps to Apache Kafka or Redpanda for distributed, high-throughput hardware.
-* **Stateful Memory Management (Go):** A concurrent, race-free persistence layer that actively manages and injects context windows into the cognitive networks.
-* **Low-Latency Streaming Pipeline:** Pipes chunked LLM tokens directly from upstream inference (e.g., Groq API) through the transport layer to the WebSocket client.
-
-```text
-[User App / Digital Avatar / Webcams]
-       │ (WebRTC / WebSockets: zero head-of-line blocking)
-       ▼
-  [FastAPI Server]    ---> Handles ultra-low latency A/V routing & VAD
-       │
-       ▼
-  [LiveKit Server]    ---> Handles ultra-low latency A/V routing & VAD
-       │
-       ▼
-[Python Agent Worker] ---> (Pipecat Orchestrator & Cognitive Networks)
-       │                   
-       ├─► [OpenCV / Local SLM] ---> Extracts context & calculates Affective State
-       ├─► [7 Network Modules] ---> Main Affective Computing Engine
-       ├─► [RL-Policy] ---> Neural Spike Reward System
-       ├─► [User-defined RAG] ---> Context-awareness
-       ├─► [Groq API / LLM]     ---> Main Foundational Model (Reasoning Hub)
-       │
-       ▼
-[Event Broker Interface] ---> (Configurable via .env: Native Asyncio Queue OR Kafka)
-       │                      (Decouples sensory stream from state persistence)
-       ▼
-   [Go Engine]        ---> Handles long-term memory, state serialization, and context injection
