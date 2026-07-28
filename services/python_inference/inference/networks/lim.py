@@ -1,6 +1,5 @@
 import os
 import sys
-    
 import json
 import time
 from datetime import datetime
@@ -213,19 +212,32 @@ class LIMNetwork:
                     )
                     amygdala_work.add(transition_the_emotion)
 
-          check_stimulus_states = self.emotion.stimulus_states
-          stimulus_labels = ["Valence", "Arousal", "Dominance"]
-          stimulus_dict = {stimulus_labels[i]: val for i, val in enumerate(check_stimulus_states)}
-
-          form_long_term_memories = asyncio.create_task([self.cen.get_working_memory() ** stimulus for stimulus, state in
-          stimulus_dict.items() if state > self.emotion.emotional_state])
-
           bloch_vector = self.emotion.bloch_vector[0]
+
+          asyncio.run(self.form_memories())
 
           if (bloch_vector['x'] + bloch_vector['y'] + bloch_vector['z']) != 0:
                self.update_emotion_matrix()
                     
           return self.emotion_matrix
+
+     async def pass_memory(self, memories):
+          return memories
+
+     async def form_memories(self):
+
+          check_stimulus_states = self.emotion.stimulus_states
+          stimulus_labels = ["Valence", "Arousal", "Dominance"]
+          stimulus_dict = {stimulus_labels[i]: val for i, val in enumerate(check_stimulus_states)}
+
+          memory_holder = None
+
+          from ...transport import memory
+
+          memory.memory_holder = await asyncio.create_task(self.pass_memory([self.cen.get_working_memory() ** stimulus for stimulus, state in
+          stimulus_dict.items() if state > self.emotion.emotional_state]))
+
+
      def extract_affective_state(self, app_output: dict) -> np.ndarray:
    
           system_prompt = """
