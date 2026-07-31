@@ -1,6 +1,8 @@
 import json, os, random, asyncio
 from watchfiles import watch, Change
 
+print("Test")
+
 memory_holder = []
 neurons = None
 
@@ -179,4 +181,4 @@ if (len(memory_holder) == 100):
         asyncio.create_task(continue_memory_transport(memory))
         memory_operation_iterate = 0
 
-synapse_watcher = watch("synaptic_neurons.json", watch_filter=memory_filter())
+synapse_watcher = watch("synaptic_neurons.json", watch_filter=memory_filter)

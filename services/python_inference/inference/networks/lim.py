@@ -1,9 +1,5 @@
-import os
-import sys
-import json
-import time
+import subprocess, json, asyncio
 from datetime import datetime
-import asyncio
 import numpy as np
 from groq import Groq
 from enum import Enum
@@ -230,12 +226,22 @@ class LIMNetwork:
           stimulus_labels = ["Valence", "Arousal", "Dominance"]
           stimulus_dict = {stimulus_labels[i]: val for i, val in enumerate(check_stimulus_states)}
 
-          memory_holder = None
-
           from ...transport import memory
 
-          memory.memory_holder = await asyncio.create_task(self.pass_memory([self.cen.get_working_memory() ** stimulus for stimulus, state in
+          pass_memory = asyncio.create_task(self.pass_memory([self.cen.get_working_memory() ** stimulus for stimulus, state in
           stimulus_dict.items() if state > self.emotion.emotional_state]))
+
+          await pass_memory
+          print(pass_memory)
+
+          #retrieve result from that asyncio and put to memory.memory_holder
+
+          memory_path = r"C:\Users\MSTR Xen\Documents\SYNEURO\services\python_inference\transport\memory.py"
+
+          result = subprocess.run(["python", memory_path], capture_output=True, text=True, universal_newlines=True)          
+
+          print(memory.memory_holder)
+
 
 
      def extract_affective_state(self, app_output: dict) -> np.ndarray:
@@ -250,7 +256,7 @@ class LIMNetwork:
                model="llama-3.1-8b-instant",
                messages=[
                     {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": "This is a test content, but I am angry"}
+                    {"role": "user", "content": ""}
                ],
                response_format={"type": "json_object"}, 
                temperature=0.1 
