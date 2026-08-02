@@ -13,9 +13,9 @@
 
 ## 📖 Overview
 
-Syneuro Engine is a high-performance distributed Affective Computing (AFC) middleware designed to bridge stateless Foundation Models (LLMs, VLMs, and audio models) with dynamic, real-time environments.
+Syneuro Engine is a high-performance distributed Affective Computing (AFC) and Cognitive Engine designed to bridge stateless Foundation Models (LLMs, VLMs, and audio models) with dynamic, real-time biological cognition mimicry.
 
-Purpose-built for virtual agents and embodied AI (robotics, edge devices), Syneuro handles temporal continuity, affective computing, and high-throughput sensory data ingestion with sub-millisecond coordination and deterministic state serialization.
+Purpose-built for virtual agents and soon - embodied AI (robotics, edge devices), Syneuro handles temporal continuity, affective computing, and high-throughput sensory data ingestion with sub-millisecond coordination and deterministic state serialization.
 
 ## Cognitive Architecture
 
