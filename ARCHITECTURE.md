@@ -127,12 +127,29 @@
 
 The SYNAPSE architecture utilizes dual-cache mechanism for hot, live, application
 instance as the AI agent continuously interact with the user. This ensures that strong
-short-term memory is enforced, along with complexity provided by the hilbert space. 
-It balances the native normal caching mechanism for hardware compliance and the 
+short-term memory is enforced, along with complexity provided by the hilbert space and optimized 
+through Numba JIT. It balances the native normal caching mechanism for hardware compliance and the 
 quantum association for comlexity.
 
 A middleware is also used that acts as the "transport" layer for the agent's brain
 passing down the memories all the way to the Neo4j Graph DB for human-like long-term memory.
+
+The overall concept for hilbert space caching lies on the mathematics of hilbert space, specifically, its
+ability to scale its dimension. For SYNEURO, having interactions with the AI agent e.g Text Conversation
+would be considered as a *temporal* activity modelled as a continuous function each interaction. For every 
+interaction, there is a chance of the AI to ignore irrelevant information which causes the continuous
+function to collapse. This not only maintains welfare of the memory but also mimics real-life human attention
+spans.
+
+Furthermore, as the user and AI interacts on prolonged hours,  the *temporal* activites generated may be 
+consolidated and strengthened further, acting as the basis for future long-term memory formulation. The half hibert
+cache also serves as persistency for stateful interactions with the AI, ensuring that it does not easily forget 
+what has been said after a long period of time. 
+
+To demonstrate, the AI would be able to remember what has been interacted with previously if the user 
+were to bring it up, as their interactions generates *temporal* activities which then becomes a 
+continuous function inside the cache, and scaling up as there is new activity.
+
 
 ```text
 ┌───────────────────────────────── SYSTEM RAM / GPU VRAM ─────────────────────────────────┐
