@@ -1,4 +1,4 @@
-import json, os, random, asyncio
+import json, random, asyncio
 from watchfiles import watch, Change
 
 print("Test")

@@ -184,8 +184,7 @@ class LIMNetwork:
                          self.amygdala(self.sensor.Video)
                          attentionGate = check_attention(self.emotion.state_vector, timestamp, 4.0) # test self.decayrate
                          asyncio.create_task(self.cen.push_attention(attentionGate, sensor_data))
-
-                    
+    
      def amygdala(self, app_output: object):
           amygdala_work = set()
 
@@ -242,8 +241,6 @@ class LIMNetwork:
 
           print(memory.memory_holder)
 
-
-
      def extract_affective_state(self, app_output: dict) -> np.ndarray:
    
           system_prompt = """
@@ -266,4 +263,3 @@ class LIMNetwork:
           stimulus = np.array([payload["valence"], payload["arousal"], payload["dominance"]])
           
           return stimulus
-
