@@ -7,7 +7,7 @@ class HilbertSpace:
 
     hilbert_space = np.array(dtype=np.complex128)
 
-    def __init__(self, hilbert_cache: np.ndarray):
+    def __init__(self, normal_cache: dict):
 
         '''
             Instantiates the HilbertSpace class along with the follow: hilbert_cache, hilbert_space_vector_id,
@@ -15,11 +15,21 @@ class HilbertSpace:
             vector mapping.
         '''
 
-        self.hilbert_cache = hilbert_cache
-        self.hilbert_space_vector_id = random.randint(10000000, 99999999)
+        self.hilbert_cache = normal_cache
         self.hilbert_space_vector = np.array()
+        self.processed_data = {}
 
-        pass
+        for datetime, data in enumerate(self.hilbert_cache):
+
+            self.hilbert_space_vector_id = random.randint(10000000, 99999999)
+            self.processed_data[self.hilbert_space_vector_id] = {datetime: data}
+
+            if (datetime[-2:] - 30 == 0):
+                self.processed_data[self.hilbert_space_vector_id]["operation"] == 1
+
+            elif (datetime[-2:] - 30 >= 1):
+                self.processed_data[self.hilbert_space_vector_id]["operation"] == 2
+
 
     def perform_operation(self) -> int:
 
@@ -27,6 +37,26 @@ class HilbertSpace:
             Performs mathematical operations with numba.jit class decorator for optimized
             CPU process. 
         '''
+
+        for vector, data in enumerate(self.processed_data):
+
+            if (data["operation"] == 1):
+
+                self.hilbert_space_vector = np.array([1+2j, 3-4j])
+
+                if (list(self.processed_data).index(vector) + 1 < len(list(self.processed_data))):
+
+                    self.processed_data[vector][data] = self.processed_data[vector][data] + self.processed_data[vector][data]
+
+            elif (data["operator"] == 2):
+
+                self.hilbert_space_vector = np.array([1+2j, 3-4j])
+
+                if (list(self.processed_data).index(vector) + 1 < len(list(self.processed_data))):
+                
+                    self.processed_data[vector][data] = self.processed_data[vector][data] * self.processed_data[vector][data]
+
+
 
         self.hilbert_space_vector = np.array([1+2j, 3-4j])
         self.hilbert_space = np.append(self.hilbert_space_vector, self.hilbert_space_vector_id)
