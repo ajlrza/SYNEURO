@@ -54,7 +54,7 @@ class HilbertSpace:
 
                 if (list(self.processed_data).index(vector) + 1 < len(list(self.processed_data))):
                 
-                    self.processed_data[vector][data] = self.processed_data[vector][data] * self.processed_data[vector][data]
+                    self.processed_data[vector][data] = np.dot(self.processed_data[vector][data], self.processed_data[vector][data]) 
 
 
 
