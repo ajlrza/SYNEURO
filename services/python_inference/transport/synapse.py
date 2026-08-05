@@ -5,7 +5,7 @@ import numba
 @numba.jit(python=False)
 class HilbertSpace:
 
-    hilbert_space = np.array(dtype=np.complex128)
+    hilbert_space = np.array([1, 0], dtype=np.complex128)
 
     def __init__(self, normal_cache: dict):
 
@@ -17,6 +17,7 @@ class HilbertSpace:
 
         self.hilbert_cache = normal_cache
         self.hilbert_space_vector = np.array()
+
         self.processed_data = {}
 
         for datetime, data in enumerate(self.hilbert_cache):
@@ -30,7 +31,18 @@ class HilbertSpace:
             elif (datetime[-2:] - 30 >= 1):
                 self.processed_data[self.hilbert_space_vector_id]["operation"] == 2
 
+    def linear_comb(self, processed_data: dict, vector, data) -> None:
 
+        self.processed_data[vector][data] = self.processed_data[list(self.processed_data.index(vector) + 1)][data]  + self.processed_data[vector][data]
+
+    def dot_prod(self, processed_data: dict, vector, data) -> None:
+
+        H = (1 / np.sqrt(2)) * np.array([[1, 1], [1, -1]])
+
+        self.processed_data[vector][data] = np.dot(H, self.processed_data[vector][data])
+        self.processed_data[vector][data] = np.dot(self.processed_data[list(self.processed_data.index(vector) - 1)][data], 
+                                                                       self.processed_data[vector][data])
+        
     def perform_operation(self) -> int:
 
         '''
@@ -46,17 +58,23 @@ class HilbertSpace:
 
                 if (list(self.processed_data).index(vector) + 1 < len(list(self.processed_data))):
 
-                    self.processed_data[vector][data] = self.processed_data[vector][data] + self.processed_data[vector][data]
+                    if (self.processed_data[vector][data][0][-2:] - 30 == 0):
+                        self.dot_prod(self.processed_data, vector, data)
+
+                    elif (self.processed_data[vector][data][0][-2:] - 30 >= 1):
+                        self.linear_comb(self.processed_data, vector, data)
 
             elif (data["operator"] == 2):
 
                 self.hilbert_space_vector = np.array([1+2j, 3-4j])
 
                 if (list(self.processed_data).index(vector) + 1 < len(list(self.processed_data))):
-                
-                    self.processed_data[vector][data] = np.dot(self.processed_data[vector][data], self.processed_data[vector][data]) 
 
+                    if (self.processed_data[vector][data][0][-2:] - 30 == 0):
+                        self.dot_prod(self.processed_data, vector, data)
 
+                    elif (self.processed_data[vector][data][0][-2:] - 30 >= 1):
+                        self.linear_comb(self.processed_data, vector, data)
 
         self.hilbert_space_vector = np.array([1+2j, 3-4j])
         self.hilbert_space = np.append(self.hilbert_space_vector, self.hilbert_space_vector_id)
@@ -109,6 +127,7 @@ class Synapse:
         self.synapse_hilbert_cache[f"{space.perform_operation()}"] = space.hilbert_space_vector
 
     def get_data(self, key):
+        
         if key in self.cache:
             return self.cache[key] # Cache Hit
         pass
