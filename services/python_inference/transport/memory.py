@@ -5,49 +5,75 @@ from watchfiles import watch, Change
 memory_holder = []
 neurons = None
 
-int_to_string_map_single = {
-    1: "one", 
-    2: "two", 
-    3: "three", 
-    4: "four", 
-    5: "five", 
-    6: "six", 
-    7: "seven", 
-    8: "eight", 
-    9: "nine"
-}
 
-int_to_string_map_single_edge = {
-    11: "eleven", 
-    12: "twelve", 
-    13: "thirteen"
-}
+def single_digit_convert(number: int = 1, lookup: bool = False) -> int | dict[int, str]:
 
-int_to_string_map_double = {
-    10: "ten", 
-    20: "twenty", 
-    30: "thirty", 
-    40: "forty", 
-    50: "fifty", 
-    60: "sixty", 
-    70: "seventy", 
-    80: "eighty", 
-    90: "ninety", 
-    100: "one hundred"
-}
+    int_to_string_map_single = {
+        1: "one", 
+        2: "two", 
+        3: "three", 
+        4: "four", 
+        5: "five", 
+        6: "six", 
+        7: "seven", 
+        8: "eight", 
+        9: "nine"
+    }
 
-int_to_string_map_scale = {
-    1: "ones", 
-    2: "tens", 
-    3: "hundred", 
-    4: "thousand", 
-    5: "ten thousands", 
-    6: "hundred thousand", 
-    7: "million", 
-    8: "ten million", 
-    9: "hundred million", 
-    10: "billion"
-}
+    if (lookup):
+        return int_to_string_map_single
+
+    return int_to_string_map_single[number]
+
+def double_digit_convert(number: int = 10, lookup: bool = False) -> int | dict[int, str]:
+
+
+    int_to_string_map_double = {
+        10: "ten", 
+        20: "twenty", 
+        30: "thirty", 
+        40: "forty", 
+        50: "fifty", 
+        60: "sixty", 
+        70: "seventy", 
+        80: "eighty", 
+        90: "ninety", 
+        100: "one hundred"
+    }
+
+    int_to_string_map_single_edge = {
+        11: "eleven", 
+        12: "twelve", 
+        13: "thirteen"
+    }
+
+    if (lookup):
+        return int_to_string_map_double
+
+    if (number in int_to_string_map_single_edge.keys()):
+        return int_to_string_map_single_edge[number]
+
+    return int_to_string_map_double[number]
+
+def scale_convert(number: int = 1, lookup: bool = False) -> int | dict[int, str]:
+    
+    int_to_string_map_scale = {
+        1: "ones", 
+        2: "tens", 
+        3: "hundred", 
+        4: "thousand", 
+        5: "ten thousands", 
+        6: "hundred thousand", 
+        7: "million", 
+        8: "ten million", 
+        9: "hundred million", 
+        10: "billion"
+    }
+
+    if (lookup):
+        return int_to_string_map_scale
+
+    return int_to_string_map_scale[number]
 
 async def continue_memory_transport(memory_iter) -> bool:
 
@@ -125,9 +151,9 @@ if (len(memory_holder) == 100):
 
             else:
 
-                if (len(str(random_available_neuron)) in int_to_string_map_scale.keys()):
+                if (len(str(random_available_neuron)) in scale_convert(lookup=True).keys()):
 
-                    int_length = int_to_string_map_scale[len(str(random_available_neuron))]
+                    int_length = scale_convert(len(str(random_available_neuron)))
 
                     if (int_length == 3):
 
@@ -136,12 +162,12 @@ if (len(memory_holder) == 100):
 
                         for number in int_string:
 
-                            int_tmp_list.append(int_to_string_map_single[number])
+                            int_tmp_list.append(single_digit_convert([number]))
 
                             if len(int_tmp_list) == 1:
-                                int_tmp_list.append(int_to_string_map_scale[3])
+                                int_tmp_list.append(scale_convert(3))
 
-                        int_tmp_list[2] = int_to_string_map_double[int(int_tmp_list[2] + "0")]
+                        int_tmp_list[2] = double_digit_convert(int(int_tmp_list[2] + "0"))
                         neuron_int_to_string = int_tmp_list.join()
 
                     if (int_length == 4):
@@ -151,16 +177,16 @@ if (len(memory_holder) == 100):
 
                         for number in int_string:
 
-                            int_tmp_list.append(int_to_string_map_single[number])
+                            int_tmp_list.append(single_digit_convert(number))
 
                             if len(int_tmp_list) == 1:
-                                int_tmp_list.append(int_to_string_map_scale[4])
+                                int_tmp_list.append(scale_convert(4))
 
                             if len(int_tmp_list) == 3:
-                                int_tmp_list.append(int_to_string_map_scale[3])
+                                int_tmp_list.append(scale_convert(3))
 
                             if len(int_tmp_list) == 4:
-                                int_tmp_list.append(int_to_string_map_double[int(int_tmp_list[2] + "0")])
+                                int_tmp_list.append(double_digit_convert(int(int_tmp_list[2] + "0")))
 
                         neuron_int_to_string = int(int_tmp_list)
 
@@ -175,21 +201,21 @@ if (len(memory_holder) == 100):
 
                         if number != 0:
 
-                            get_double_digit = int_to_string_map_double[int(int_tmp_list[0] + "0")]
+                            get_double_digit = double_digit_convert(int(int_tmp_list[0] + "0"))
                             int_tmp_list.clear()
                             neuron_int_to_string = int(get_double_digit)
 
-                    double_digit = int_to_string_map_double[int(int_tmp_list[1] + "0")]
+                    double_digit = double_digit_convert(int(int_tmp_list[1] + "0"))
                     int_tmp_list[0] = double_digit
 
                     neuron_int_to_string = int(int_tmp_list)
 
 
                 neurons["neuron_status"][random_available_neuron] = "Active"
-                neurons["neuron_status"][neuron_int_to_string] = parse_memory # Assuming thisalso has the same format in json so they just be overwritten smoothly
+                neurons["neuron_status"][neuron_int_to_string] = parse_memory # Assuming this also has the same format in json so they just be overwritten smoothly
 
                 neuron_activated = True
-                print(f"[{memory_holder.index(memory)+1}/100] Memory allocated to Neuron {random_available_neuron} (Attempts: {memory_operation_iterate})")
+                print(f"[{ memory_holder.index(memory) +1 }/100] Memory allocated to Neuron {random_available_neuron} (Attempts: {memory_operation_iterate})")
 
         asyncio.create_task(continue_memory_transport(memory))
         memory_operation_iterate = 0
