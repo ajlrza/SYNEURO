@@ -5,23 +5,25 @@ import json, os, random, asyncio, numba, neo4j
 URI = os.environ.get("NEO4J_URI")
 DATABASE = os.environ.get("NEO4J_DB")
 AUTH = (DATABASE, os.environ.get("PW"))
+DRIVER = GraphDatabase.driver(URI, auth=AUTH)
 
-driver = GraphDatabase.driver(URI, auth=AUTH)
+memory_to_store: dict[str, any] = {}
 
-driver.verify_connectivity()
-driver.verify_connectivity()
+DRIVER = GraphDatabase.driver(URI, auth=AUTH)
 
-driver.execute_query(
+DRIVER.verify_connectivity()
+
+DRIVER.execute_query(
     "CREATE DATABASE SYNEURO",
     database_="system" 
 )
 
-session = driver.session(database=DATABASE)
+SESSION = DRIVER.session(database=DATABASE)
 
 
 
-session.close()
-driver.close()
+SESSION.close()
+DRIVER.close()
 
 
 

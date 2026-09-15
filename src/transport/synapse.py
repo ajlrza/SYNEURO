@@ -1,22 +1,13 @@
 import numba
 import numpy as np
 import json, os, random, asyncio
-from dataclasses import dataclass, field
- 
-@dataclass
-class NormalCacheEntry:
-    timestamp: str
-    data: object
-
-@dataclass
-class NormalCacheStore:
-    store: dict 
+from .memory_dataclasses import NormalCacheEntry, NormalCacheStore
 
 class HilbertSpace:
 
     hilbert_space = np.array([1, 0], dtype=np.complex128)
 
-    def __init__(self, normal_cache: ncache_dc_list):
+    def __init__(self, normal_cache: NormalCacheEntry):
 
         '''
             Instantiates the HilbertSpace class along with the follow: hilbert_cache, hilbert_space_vector_id,
@@ -24,7 +15,7 @@ class HilbertSpace:
             vector mapping.
         '''
 
-        self.normal_cache: normal_cache_dc
+        self.normal_cache: NormalCacheEntry
         self.hilbert_space_vector = np.array([], dtype=np.complex128)
 
         self.processed_data = {}
@@ -32,7 +23,11 @@ class HilbertSpace:
         for index, data in enumerate(self.normal_cache):
 
             self.hilbert_space_vector_id = random.randint(10000000, 99999999)
-            self.processed_data[self.hilbert_space_vector_id] = {datetime: data}
+
+            if data == "date":
+                self.processed_data[self.hilbert_space_vector_id] = {"date": data}
+            else:
+                continue
 
             if (self.hilbert_cache[index][-2:] - 30 == 0):
                 self.processed_data[self.hilbert_space_vector_id]["operation"] = 1

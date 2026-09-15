@@ -6,3 +6,4 @@ from .sen import SENNetwork
 from .ven import VENNetwork
 from .vis import VISNetwork
 from .network_imports import network_builder 
+from ...transport import memory

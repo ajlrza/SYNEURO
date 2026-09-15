@@ -32,27 +32,31 @@ class TestInference(unittest.TestCase):
 
         load_dotenv()
         api_key = os.getenv('TEST_CASE_KEY')
-        from services.python_inference.inference.brain import Brain
+        from src.inference.brain import Brain
         brain = Brain(app_output, api_key)
 
-        from services.python_inference.inference.brain import syneuro_conscious_state
+        from src.inference.brain import syneuro_conscious_state
         syneuro_conscious_state(Brain, app_output, api_key)
 
 
     def test_activate_bm_syneuro(self):
 
         app_output = {
+            'datetime': '2026-06-25',
             'sensory': {
-                '2026-06-25T12:30:00.000Z': 'This is a test yay.',
-                '2026-06-25T1:30:00.000Z': 'This is not a test!!!',
+                'Text': {'Time': 'T12:30:00.000Z', 'Data': 'This is a test yay.'},
+                'Text': {'Time': 'T12:31:00.000Z', 'Data': 'This is not a test!!!'},
+                'Image': {'Time': 'T12:32:00.000Z', 'Data': bytearray[1]}
             },
             'modalities': [
                 'Text',
-                'Text'
+                'Text',
+                'Image'
             ],
             'request_activation': [
                 'CEN',
-                'CLIM'
+                'CLIM',
+                'VIS'
             ],
             'active_modules': [
                 'CEN',
@@ -62,11 +66,11 @@ class TestInference(unittest.TestCase):
 
         load_dotenv()
         api_key = os.getenv('TEST_CASE_KEY')
-        from services.python_inference.inference.brain import Brain
+        from src.inference.brain import Brain
         brain = Brain(app_output, api_key)
         
         activate_bm = brain.activate_brain_module('LIM')
-        from services.python_inference.inference.networks.network_imports import network_builder  
+        from src.inference.networks.network_imports import network_builder  
 
         lim = network_builder("LIM")
 

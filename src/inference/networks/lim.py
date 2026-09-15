@@ -1,14 +1,10 @@
-import subprocess, json, asyncio
-from datetime import datetime
+import transport
 import numpy as np
 from groq import Groq
 from enum import Enum
-
-class SensoryOutput:
-     Text: str = None
-     Audio: bytearray = None
-     Video: bytearray = None
-     pass
+from datetime import datetime
+import subprocess, json, asyncio
+from src.inference.networks.networks_classes import SensoryOutput
 
 def get_emotional_state(valence: float, arousal: float) -> tuple[np.complex128, np.complex128]:
     """
@@ -84,7 +80,7 @@ class LIMNetwork:
      Responsible for  Deeply involved in the emotional center of the brain; 
      it regulates mood, emotional responses, motivation, and memory formation.
      '''
-     client: str
+     client: Groq
      sensor: SensoryOutput
      emotion: QuantumEmotion
      emotion_matrix: dict 
@@ -225,21 +221,19 @@ class LIMNetwork:
           stimulus_labels = ["Valence", "Arousal", "Dominance"]
           stimulus_dict = {stimulus_labels[i]: val for i, val in enumerate(check_stimulus_states)}
 
-          from ...transport import memory
-
           pass_memory = asyncio.create_task(self.pass_memory([self.cen.get_working_memory() ** stimulus for stimulus, state in
           stimulus_dict.items() if state > self.emotion.emotional_state]))
 
           await pass_memory
           print(pass_memory)
 
-          #retrieve result from that asyncio and put to memory.memory_holder
+          # retrieve result from that asyncio and put to memory.memory_holder
 
           memory_path = r"C:\Users\MSTR Xen\Documents\SYNEURO\services\python_inference\transport\memory.py"
 
           result = subprocess.run(["python", memory_path], capture_output=True, text=True, universal_newlines=True)          
 
-          print(memory.memory_holder)
+          print(transport.memory.memory_holder)
 
      def extract_affective_state(self, app_output: dict) -> np.ndarray:
    

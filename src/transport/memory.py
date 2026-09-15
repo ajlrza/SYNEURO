@@ -1,11 +1,11 @@
+import src.transport as transport
 import json, random, asyncio
 from watchfiles import watch, Change
-from ..transport import middleware
 
-memory_holder = []
-neurons = None
+memory_holder: list[object] = []
+neurons: object | None = None
 
-int_to_string_map_single = {
+INT_TO_STRING_SINGLE = {
     1: "one", 
     2: "two", 
     3: "three", 
@@ -26,7 +26,7 @@ int_to_string_map_single = {
     "9": 9,
 }
 
-int_to_string_map_single_edge = {
+INT_TO_STRING_SINGLE_EDGE = {
     11: "eleven", 
     12: "twelve", 
     13: "thirteen",
@@ -35,7 +35,7 @@ int_to_string_map_single_edge = {
     "13": 13,
 }
 
-int_to_string_map_double = {
+INT_TO_STRING_DOUBLE = {
     10: "ten", 
     20: "twenty", 
     30: "thirty", 
@@ -58,7 +58,7 @@ int_to_string_map_double = {
     "100": 100
 }
 
-int_to_string_map_scale = {
+INT_TO_STRING_SCALE = {
     1: "ones", 
     2: "tens", 
     3: "hundred", 
@@ -73,7 +73,7 @@ int_to_string_map_scale = {
 
 async def continue_memory_transport(memory: dict[str, any]) -> bool:
 
-    middleware.MEMORY = memory
+    transport.middleware.memory_to_store = memory
 
     return True
     
@@ -141,7 +141,7 @@ if (len(memory_holder) == 100):
 
             else:
 
-                if (len(str(random_available_neuron)) in int_to_string_map_scale.keys()):
+                if (len(str(random_available_neuron)) in INT_TO_STRING_SCALE.keys()):
 
                     int_length = len(str(random_available_neuron))
 
@@ -152,12 +152,12 @@ if (len(memory_holder) == 100):
 
                         for str_digit in int_string:
 
-                            str_nums.append(int_to_string_map_single[str_digit])
+                            str_nums.append(INT_TO_STRING_SINGLE[str_digit])
 
                             if len(str_nums) == 1:
-                                str_nums.append(int_to_string_map_scale[3])
+                                str_nums.append(INT_TO_STRING_SCALE[3])
 
-                        str_nums[2] = int_to_string_map_double[int(str_nums[2])] + "0"
+                        str_nums[2] = INT_TO_STRING_DOUBLE[int(str_nums[2])] + "0"
 
                         neuron_id = int("".join(str_nums))
 
@@ -168,16 +168,16 @@ if (len(memory_holder) == 100):
 
                         for number in int_string:
 
-                            str_nums.append(int_to_string_map_single[int(number)])
+                            str_nums.append(INT_TO_STRING_SINGLE[int(number)])
 
                             if len(str_nums) == 1:
-                                str_nums.append(int_to_string_map_scale[4])
+                                str_nums.append(INT_TO_STRING_SCALE[4])
 
                             if len(str_nums) == 3:
-                                str_nums.append(int_to_string_map_scale[3])
+                                str_nums.append(INT_TO_STRING_SCALE[3])
 
                             if len(str_nums) == 4:
-                                str_nums.append(int_to_string_map_double[int(str_nums[2])] + "0")
+                                str_nums.append(INT_TO_STRING_DOUBLE[int(str_nums[2])] + "0")
 
                         neuron_id = int("".join(str_nums))
 
@@ -192,7 +192,7 @@ if (len(memory_holder) == 100):
 
                         if int(number) != 0:
 
-                            get_double_digit = int_to_string_map_double[int(str_nums[0])] + "0"
+                            get_double_digit = INT_TO_STRING_DOUBLE[int(str_nums[0])] + "0"
 
                             str_nums.clear()
 
@@ -201,7 +201,7 @@ if (len(memory_holder) == 100):
                         else: 
                             continue
 
-                    double_digit = int_to_string_map_double[int(str_nums[1])] + "0"
+                    double_digit = INT_TO_STRING_DOUBLE[int(str_nums[1])] + "0"
 
                     str_nums[0] = double_digit
 
@@ -212,7 +212,7 @@ if (len(memory_holder) == 100):
                     continue
 
                 neurons["neuron_status"][random_available_neuron] = "Active"
-                neurons["neuron_status"][neuron_int_to_string] = parse_memory # Assuming thisalso has the same format in json so they just be overwritten smoothly
+                neurons["neuron_status"][neuron_id] = parse_memory # Assuming thisalso has the same format in json so they just be overwritten smoothly
 
                 neuron_activated = True
                 print(f"[{memory_holder.index(memory)+1}/100] Memory allocated to Neuron {random_available_neuron} (Attempts: {memory_operation_iterate})")
