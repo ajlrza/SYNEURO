@@ -6,7 +6,7 @@
 > 
 <div align="center" style="display:inline-flex; gap:16px; align-items:center; background:#111; border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:16px 24px; box-shadow:0 12px 32px rgba(0,0,0,0.25);">
   <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/Python-logo.png" alt="Python" width="50" />
-  <img src="https://commons.wikimedia.org/wiki/File:Pytorch_logo.png#/media/File:Pytorch_logo.png" alt="PyTorch" width="50" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Pytorch_logo.png" alt="PyTorch" width="50" />
 </div>
 ## 📖 Overview
 
