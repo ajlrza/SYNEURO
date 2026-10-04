@@ -1,11 +1,3 @@
-<p align="center">
-  <img src="./Syneuro.png" alt="Syneuro Logo" width="180" style="max-width:100%; height:auto;" />
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
-</p>
-
 ## 📖 Overview
 
 Syneuro is an LLM Persona Architecture designed to simulate complex emotions via Python
